@@ -1,9 +1,11 @@
 define([
     'jquery',
+    'modules/slider.jquery',
     'moddef'
 
 ], function(
     $,
+    _slider,
     M
 ){
     'use strict';
@@ -19,6 +21,20 @@ define([
                 self.width = 600; //window.innerWidth;
                 self.height = 500; // window.innerHeight;
                 self.emit('resize');
+            });
+
+            this.$el = $('#controls');
+
+            this.$el.find('.slider').slider();
+
+            this.$el.on('change', '.slider', function( e, val ){
+                var $this = $(this)
+                    ,name = $this.attr('data-name')
+                    ;
+
+                if ( name ){
+                    self.emit('change:'+name, val);
+                }
             });
 
 

@@ -1,5 +1,7 @@
 define([
     'jquery',
+    'tween',
+    'modules/canvas-draw',
     'modules/interface',
     'physicsjs',
     'physicsjs/renderers/canvas',
@@ -16,6 +18,8 @@ define([
     'modules/strong-nuclear.physicsjs'
 ], function(
     $,
+    TWEEN,
+    Draw,
     Interface,
     Physics,
     __blank
@@ -37,10 +41,10 @@ define([
             // bounds of the window
             ,viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight)
             ,center = Physics.vector(viewWidth/2, viewHeight/2)
-            ,attractor = Physics.behavior('attractor', { pos: center, min: viewWidth/2, strength: 5e-9, order: -2 })
+            ,attractor = Physics.behavior('attractor', { pos: center, min: viewWidth/2, strength: 1e-8, order: -2 })
             ,edgeBounce
             ,renderer
-            ,coulomb = Physics.behavior('coulomb', { strength: 8 })
+            ,coulomb = Physics.behavior('coulomb', { strength: 7 })
             ,Bfield = Physics.behavior('magnetic', {strength: .01})
             ;
 
@@ -56,6 +60,22 @@ define([
         // render on each step
         world.on('step', function () {
             world.render();
+        });
+
+        // set a velocity maximum
+        var maxV = 2;
+        world.on('integrate:velocities', function( data ){
+            var bodies = data.bodies
+                ,n
+                ;
+
+            for ( var i = 0, l = bodies.length; i < l; i++ ){
+                n = bodies[ i ].state.vel.norm();
+
+                if ( n > maxV ){
+                    bodies[ i ].state.vel.normalize().mult( maxV );
+                }
+            }
         });
 
         // constrain objects to these bounds
@@ -81,7 +101,7 @@ define([
         });
 
         // create some protons
-        var l = 0, x, y, add, pos = Physics.vector();
+        var l = 0, x, y, add, pos = Physics.vector(), v;
         var particles = [];
         while( l < 20 ){
             add = true;
@@ -94,17 +114,72 @@ define([
             }
 
             if ( add ){
+                v = Physics.vector(1, 0).rotate(Math.random()*2*Math.PI).mult( 0.1 * Math.random() );
                 l = particles.push( Physics.body('particle', {
                     x: pos.x
                     ,y: pos.y
-                    ,vx: -0.15
+                    ,vx: v.x
+                    ,vy: v.y
                     ,mass: 1
-                    ,radius: 8
+                    ,radius: 5
                 }));
             }
         }
 
         world.add(particles);
+
+        var lastE = 1;
+        ui.on({
+            'change:field': function( e, val ){
+                Bfield.options.strength = val;
+            }
+            ,'change:energy': function( e, val ){
+                var scale = Math.sqrt(val/lastE);
+                lastE = val;
+                for ( var i = 0, l = particles.length; i < l; i++ ){
+                    particles[ i ].state.vel.mult( scale );
+                }
+            }
+        });
+
+        world.on('fusion', function( entity ){
+            // create a little explosion animation
+            var pos = Physics.vector().clone( entity.members[0].state.pos )
+                ,text = entity.name
+                ,s = {
+                    lineWidth: 3
+                    ,strokeStyle: 'rgba(136, 130, 0, 1)'
+                    ,shadowBlur: 10
+                }
+                ,textStyles = {
+                    font: '30px "latin-modern-mono-light", Courier, monospace'
+                    ,fillStyle: 'rgba(200, 0, 0, 1)'
+                }
+                ,ctx = renderer.layer('main').ctx
+                ;
+
+            new TWEEN.Tween({ r: 1, opacity: 1 })
+                .to( { r: 600, opacity: 0 }, 1000 )
+                .easing( TWEEN.Easing.Linear.None )
+                .onUpdate(function () {
+
+                    s.strokeStyle = s.shadowColor = s.strokeStyle.replace( /[^,]*\)$/, this.opacity + ')' );
+                    Draw( ctx ).styles( s ).circle( pos.x, pos.y, this.r );
+
+                })
+                .start()
+                ;
+
+            new TWEEN.Tween({ dy: 0, opacity: 1 })
+                .to({ dy: -50, opacity: 0 }, 1500)
+                .easing( TWEEN.Easing.Linear.None )
+                .onUpdate(function(){
+                    textStyles.fillStyle = textStyles.fillStyle.replace( /[^,]*\)$/, this.opacity + ')' );
+                    Draw( ctx ).styles( textStyles ).text( text, pos.x, pos.y + this.dy );
+                })
+                .start()
+                ;
+        });
 
         // add things to the world
         world.add([
@@ -122,11 +197,13 @@ define([
         // subscribe to ticker to advance the simulation
         Physics.util.ticker.on(function( time ) {
             world.step( time );
+            TWEEN.update();
         });
 
         // start the ticker
         Physics.util.ticker.start();
     }
 
+    // wait for domready, then initialize
     Physics({ timestep: 0.2 }, [ domready, simulation ]);
 });

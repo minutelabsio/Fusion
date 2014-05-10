@@ -1,15 +1,53 @@
-/* line 5, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 1, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/_slider.scss */
+.slider {
+  margin: 10px 16px;
+  border: 1px solid #c8c8c8;
+  height: 6px;
+  background: #fff;
+  z-index: 1;
+  cursor: pointer;
+}
+/* line 9, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/_slider.scss */
+.slider .handle {
+  background: gainsboro;
+  border: 1px solid #626262;
+  width: 24px;
+  height: 24px;
+  z-index: 2;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+}
+/* line 18, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/_slider.scss */
+.slider .handle:hover {
+  background: #fff;
+}
+/* line 23, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/_slider.scss */
+.slider .meter {
+  z-index: 1;
+  background: #2888e4;
+  border: 1px solid #2888e4;
+}
+
+/* line 6, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 html, body, #wrap-outer {
   height: 100%;
 }
 
-/* line 9, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
-#simulation {
+/* line 11, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#simulation,
+#controls {
   width: 600px;
+  height: 600px;
   margin: auto;
 }
 
-/* line 14, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 21, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #physics {
   border: 1px solid black;
 }

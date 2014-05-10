@@ -87,6 +87,7 @@ define([
                     bodyA.ptype = 'neutron';
 
                     this.createEntity('H2', [bodyA, bodyB]);
+                    this._world.emit('fusion', bodyA.entity);
                     return;
                 }
 
@@ -102,6 +103,7 @@ define([
 
                     bodyB.entity.name = 'He3';
                     bodyB.entity.addMember( bodyA );
+                    this._world.emit('fusion', bodyA.entity);
                     return;
                 }
 
@@ -127,6 +129,7 @@ define([
 
                     // bind all in t
                     this.createEntity( 'He4', t );
+                    this._world.emit('fusion', t[0].entity);
                 }
             }
             ,handleCollisions: function( data ){

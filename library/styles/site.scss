@@ -1,17 +1,23 @@
 // site styles
-// @import 'compass/css3';
+@import 'compass/css3';
 @import '_vars';
+@import '_slider';
 
 html, body, #wrap-outer {
     height: 100%;
 }
 
-#simulation {
+#simulation,
+#controls {
     width: 600px;
+    height: 600px;
     margin: auto;
 }
 
-#physics {
+#controls {
 
+}
+
+#physics {
     border: 1px solid black;
 }

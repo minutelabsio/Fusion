@@ -8,7 +8,9 @@ require.config({
     },
 
     shim: {
-        // Add shims for things here
+        'tween': {
+            exports: 'TWEEN'
+        }
     },
 
     paths: {
@@ -29,6 +31,8 @@ require.config({
         'stapes': 'vendor/stapes',
         'hammer.jquery': 'vendor/hammer.jquery',
         'moddef': 'util/module',
+
+        'tween': 'vendor/tween',
 
         // jQuery
         'jquery': 'vendor/jquery',
