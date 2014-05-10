@@ -1,0 +1,15 @@
+/* line 5, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+html, body, #wrap-outer {
+  height: 100%;
+}
+
+/* line 9, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#simulation {
+  width: 600px;
+  margin: auto;
+}
+
+/* line 14, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#physics {
+  border: 1px solid black;
+}
