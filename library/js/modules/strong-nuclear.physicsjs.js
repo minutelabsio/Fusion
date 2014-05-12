@@ -14,11 +14,11 @@ define([
             init: function( opts ){
                 parent.init.call(this, opts);
                 this.options.defaults({
-
+                    maxVel: 1.5
                 });
                 this.options( opts );
 
-                this.constraints = Physics.behavior('verlet-constraints');
+                this.constraints = Physics.behavior('verlet-constraints', { iterations: 3 });
             }
             ,connect: function( world ){
                 world.add( this.constraints );
@@ -48,7 +48,7 @@ define([
                     }
                     ,removeBonds: function(){
                         var i, l;
-                        for ( i = 0, l = e.bonds; i < l; i++ ){
+                        for ( i = 0, l = e.bonds.length; i < l; i++ ){
                             constr.remove( e.bonds[ i ] );
                         }
 
@@ -66,9 +66,9 @@ define([
 
                         if ( l === 4 ){
                             c = constr.distanceConstraint(e.members[0], e.members[2], 1, d);
-                            e.members.bonds.push( c );
+                            e.bonds.push( c );
                             c = constr.distanceConstraint(e.members[1], e.members[3], 1, d * Math.sqrt(3));
-                            e.members.bonds.push( c );
+                            e.bonds.push( c );
                         }
                     }
                 };
@@ -79,6 +79,11 @@ define([
                 var self = this
                     ,t
                     ;
+
+                // check max velocity
+                if ( bodyA.state.vel.dist( bodyB.state.vel ) > self.options.maxVel ){
+                    return;
+                }
 
                 // two solitary particles
                 if ( !bodyA.entity && !bodyB.entity ){

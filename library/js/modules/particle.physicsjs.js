@@ -14,6 +14,8 @@ define([
                 this.options.defaults({
                     charge: 1
                     ,ptype: 'proton'
+                    ,restitution: 1
+                    ,cof: 0
                 });
                 this.options( opts );
             }

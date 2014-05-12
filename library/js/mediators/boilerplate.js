@@ -63,7 +63,7 @@ define([
         });
 
         // set a velocity maximum
-        var maxV = 2;
+        var maxV = 4;
         world.on('integrate:velocities', function( data ){
             var bodies = data.bodies
                 ,n
