@@ -132,6 +132,10 @@ define([
                     // free two protons...
                     protons[2].entity = protons[3].entity = null;
 
+                    // set positions
+                    t[1].state.pos.set( t[0].geometry.radius, 0 ).rotate( Math.PI/6 ).vadd( t[0].state.pos );
+                    t[2].state.pos.set( 2 * t[0].geometry.radius * Math.sqrt(3), 0 ).vadd( t[0].state.pos );
+                    t[3].state.pos.set( t[0].geometry.radius, 0 ).rotate( -Math.PI/6 ).vadd( t[0].state.pos );
                     // bind all in t
                     this.createEntity( 'He4', t );
                     this._world.emit('fusion', t[0].entity);
