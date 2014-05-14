@@ -39,15 +39,71 @@ html, body, #wrap-outer {
   height: 100%;
 }
 
-/* line 11, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 10, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+.radio-group {
+  overflow: hidden;
+}
+/* line 13, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+.radio-group > a {
+  position: relative;
+  text-decoration: none;
+  color: #1a1a1a;
+  display: block;
+  float: left;
+  height: 3em;
+}
+/* line 21, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+.radio-group > a:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 1.2em;
+  height: 1.2em;
+  margin-left: -0.65em;
+  border: 2px solid #2888e4;
+  background: #fff;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* line 35, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+.radio-group > a.on:after {
+  background: #2888e4;
+}
+
+/* line 42, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #simulation,
 #controls {
   width: 600px;
-  height: 600px;
+  height: 500px;
   margin: auto;
 }
 
-/* line 21, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
-#physics {
+/* line 48, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#controls {
+  padding: 2em 0;
+}
+/* line 50, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#controls .field-type {
+  overflow: hidden;
+  margin-bottom: 2em;
+}
+/* line 53, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#controls .field-type .radio-group {
+  margin-left: 1em;
+}
+/* line 55, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#controls .field-type .radio-group > a {
+  margin-right: 4em;
+}
+
+/* line 62, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#simulation canvas {
   border: 1px solid black;
 }

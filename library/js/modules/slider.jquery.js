@@ -30,7 +30,7 @@ define(['jquery'], function( $ ){
         var startevent = window.Modernizr.touch ? 'touchstart' : 'mousedown';
         var moveevent = window.Modernizr.touch ? 'touchmove' : 'mousemove';
         var endevent = window.Modernizr.touch ? 'touchend' : 'mouseup';
-        
+
         return $(this).each(function(){
             var $this = $(this).addClass('slider')
                 ,options = $.extend({
@@ -117,6 +117,7 @@ define(['jquery'], function( $ ){
             });
 
             $this.on('refresh', function( e, v ){
+                v = Math.min(Math.max(v, options.min), options.max);
                 val = (v - options.min) / factor;
                 set();
             });

@@ -26,11 +26,65 @@ define([
 ) {
     'use strict';
 
+    var colors = {
+        'grey': 'rgb(220, 220, 220)'
+        ,'greyLight': 'rgb(237, 237, 237)'
+        ,'greyDark': 'rgb(200, 200, 200)'
+
+        ,'deepGrey': 'rgb(67, 67, 67)'
+        ,'deepGreyLight': 'rgb(98, 98, 98)'
+
+        ,'blue': 'rgb(40, 136, 228)'
+        ,'blueLight': 'rgb(91, 191, 243)'
+        ,'blueDark': 'rgb(18, 84, 151)'
+
+        ,'blueGlass': 'rgb(221, 249, 255)'
+
+        ,'blueFire': '#626ead'
+
+        ,'green': 'rgb(121, 229, 0)'
+        ,'greenLight': 'rgb(125, 242, 129)'
+        ,'greenDark': 'rgb(64, 128, 0)'
+
+        ,'red': 'rgb(233, 63, 51)'
+        ,'redLight': 'rgb(244, 183, 168)'
+        ,'redDark': 'rgb(167, 42, 34)'
+
+        ,'orange': 'rgb(239, 132, 51)'
+        ,'orangeLight': 'rgb(247, 195, 138)'
+        ,'orangeDark': 'rgb(159, 80, 31)'
+
+        ,'yellow': 'rgb(228, 212, 44)'
+        ,'yellowLight': 'rgb(242, 232, 110)'
+        ,'yellowDark': 'rgb(139, 129, 23)'
+
+    };
+
+    function adjustAlpha( color, alpha ){
+        color = color.split(/[\(,\)]/);
+        color.pop();
+        color[4] = alpha;
+        var type = color.shift().split('a')[0] + 'a';
+        return type+'('+ color.join(',') +')';
+    }
+
     // wait for domready deferred
     function domready(){
         var dfd = $.Deferred();
         $(function(){ dfd.resolve(); });
         return dfd.promise();
+    }
+
+    function lerp(a, b, p) {
+        return (b-a)*p + a;
+    }
+
+    function BFieldStrength( v ){
+        return lerp(0.0001, 0.1, v);
+    }
+
+    function GFieldStrength( v ){
+        return lerp(2, 60, v);
     }
 
     function simulation( world ) {
@@ -45,7 +99,8 @@ define([
             ,edgeBounce
             ,renderer
             ,coulomb = Physics.behavior('coulomb', { strength: 7 })
-            ,Bfield = Physics.behavior('magnetic', {strength: .01})
+            ,Bfield = Physics.behavior('magnetic', { strength: BFieldStrength(ui.settings.field) })
+            ,Gfield = Physics.behavior('attractor', { pos: center, min: 30, strength: GFieldStrength(ui.settings.field), order: 2 })
             ;
 
         // create a renderer
@@ -54,6 +109,8 @@ define([
             ,width: viewWidth
             ,height: viewHeight
         });
+
+        renderer.addLayer('bg', false, { zIndex: 0 }).render = function(){};
 
         // add the renderer
         world.add(renderer);
@@ -106,15 +163,15 @@ define([
         while( l < 20 ){
             add = true;
             pos.set(viewWidth * Math.random(), viewHeight  * Math.random());
-            for ( var i = 0, l = particles.lenght; i < l; i++ ){
-                if ( particles[i].state.pos.dist(pos) <= 40 ){
+            for ( var i = 0, l = particles.length; i < l; i++ ){
+                if ( particles[i].state.pos.dist(pos) <= 80 ){
                     add = false;
                     break;
                 }
             }
 
             if ( add ){
-                v = Physics.vector(1, 0).rotate(Math.random()*2*Math.PI).mult( 0.1 * Math.random() );
+                v = Physics.vector(1, 0).rotate(Math.random()*2*Math.PI).mult( 0.05 * Math.random() );
                 l = particles.push( Physics.body('particle', {
                     x: pos.x
                     ,y: pos.y
@@ -131,7 +188,36 @@ define([
         var lastE = 1;
         ui.on({
             'change:field': function( e, val ){
-                Bfield.options.strength = val;
+                Bfield.options.strength = BFieldStrength( val );
+                Gfield.options.strength = GFieldStrength( val );
+
+                if ( ui.settings.fieldType === 'gravity' ){
+                    // radial gradient
+                    Draw( renderer.layer('bg').ctx );
+                    var grd = Draw.ctx.createRadialGradient(center.x, center.y, lerp( 200, 40, ui.settings.field ), center.x, center.y, viewWidth*0.9);
+                    grd.addColorStop(0, 'white');
+                    grd.addColorStop(1, colors.greenLight);
+                    Draw
+                        .styles('fillStyle', grd)
+                        .rect(0, 0, viewWidth, viewHeight)
+                        .fill()
+                        ;
+                } else {
+                    Draw( renderer.layer('bg').ctx )
+                        .clear()
+                        .styles('fillStyle', adjustAlpha( colors.greenLight, lerp( 0, .8, val ) ))
+                        .rect(0, 0, viewWidth, viewHeight)
+                        .fill()
+                        ;
+                }
+            }
+            ,'change:fieldType': function( e, val ){
+                if ( val === 'magnetic' ){
+                    world.add( Bfield ).remove( Gfield );
+                } else {
+                    world.add( Gfield ).remove( Bfield );
+                }
+                ui.emit('change:field', ui.settings.field);
             }
             ,'change:energy': function( e, val ){
                 var scale = Math.sqrt(val/lastE);
@@ -140,7 +226,27 @@ define([
                     particles[ i ].state.vel.mult( scale );
                 }
             }
+            ,'add': function( e ){
+                var tries = 100;
+                do {
+                    pos.set(viewWidth * Math.random(), viewHeight  * Math.random());
+                } while ( tries-- && world.findOne({ $at: pos }) );
+
+                v = Physics.vector(1, 0).rotate(Math.random()*2*Math.PI).mult( Math.sqrt(ui.settings.energy) * 0.5 * Math.random() );
+                var p = Physics.body('particle', {
+                    x: pos.x
+                    ,y: pos.y
+                    ,vx: v.x
+                    ,vy: v.y
+                    ,mass: 1
+                    ,radius: 5
+                });
+                world.add( p );
+                particles.push( p );
+            }
         });
+
+        ui.emit('change:field', ui.settings.field);
 
         world.on('fusion', function( entity ){
             // create a little explosion animation
@@ -179,6 +285,8 @@ define([
                 })
                 .start()
                 ;
+
+            ui.emit('add');
         });
 
         // add things to the world
@@ -191,7 +299,8 @@ define([
             //,edgeBounce
             ,attractor
             ,coulomb
-            ,Bfield
+            // ,Bfield
+            ,Gfield
         ]);
 
         // subscribe to ticker to advance the simulation

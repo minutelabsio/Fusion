@@ -7,17 +7,58 @@ html, body, #wrap-outer {
     height: 100%;
 }
 
+.radio-group {
+    overflow: hidden;
+    // the radio buttons
+    > a {
+        position: relative;
+        text-decoration: none;
+        color: $deep-grey-dark;
+        display: block;
+        float: left;
+        height: 3em;
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 1.2em;
+            height: 1.2em;
+            margin-left: -0.65em;
+            border: 2px solid $blue;
+            background: #fff;
+            @include border-radius( 50% );
+            @include box-sizing( border-box );
+        }
+
+        &.on:after {
+            background: $blue;
+        }
+    }
+}
+
 #simulation,
 #controls {
     width: 600px;
-    height: 600px;
+    height: 500px;
     margin: auto;
 }
 
 #controls {
-
+    padding: 2em 0;
+    .field-type {
+        overflow: hidden;
+        margin-bottom: 2em;
+        .radio-group {
+            margin-left: 1em;
+            > a {
+                margin-right: 4em;
+            }
+        }
+    }
 }
 
-#physics {
+#simulation canvas {
     border: 1px solid black;
 }
