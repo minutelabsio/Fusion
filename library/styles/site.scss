@@ -53,7 +53,10 @@ html, body, #wrap-outer {
         .radio-group {
             margin-left: 1em;
             > a {
-                margin-right: 4em;
+                margin-right: 48px;
+                &:last-child {
+                    margin-right: 0;
+                }
             }
         }
     }
