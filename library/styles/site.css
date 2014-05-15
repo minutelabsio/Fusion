@@ -100,10 +100,14 @@ html, body, #wrap-outer {
 }
 /* line 55, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #controls .field-type .radio-group > a {
-  margin-right: 4em;
+  margin-right: 48px;
+}
+/* line 57, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#controls .field-type .radio-group > a:last-child {
+  margin-right: 0;
 }
 
-/* line 62, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 65, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #simulation canvas {
   border: 1px solid black;
 }

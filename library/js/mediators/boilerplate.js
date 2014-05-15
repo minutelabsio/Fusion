@@ -87,6 +87,10 @@ define([
         return lerp(2, 60, v);
     }
 
+    function R2FieldStrength( v ){
+        return lerp(1e-8, 1e-7, v);
+    }
+
     function simulation( world ) {
 
         var ui = Interface( world )
@@ -101,6 +105,7 @@ define([
             ,coulomb = Physics.behavior('coulomb', { strength: 7 })
             ,Bfield = Physics.behavior('magnetic', { strength: BFieldStrength(ui.settings.field) })
             ,Gfield = Physics.behavior('attractor', { pos: center, min: 30, strength: GFieldStrength(ui.settings.field), order: 2 })
+            ,R2field = Physics.behavior('attractor', { pos: center, min: 50, strength: R2FieldStrength(ui.settings.field), order: -2 })
             ;
 
         // create a renderer
@@ -148,7 +153,7 @@ define([
             viewWidth = ui.width;
             viewHeight = ui.height;
 
-            renderer.resize( viewWidth, viewWidth );
+            renderer.resize( viewWidth, viewHeight );
 
             viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight);
             // update the boundaries
@@ -190,6 +195,7 @@ define([
             'change:field': function( e, val ){
                 Bfield.options.strength = BFieldStrength( val );
                 Gfield.options.strength = GFieldStrength( val );
+                R2field.options.strength = R2FieldStrength( val );
 
                 if ( ui.settings.fieldType === 'gravity' ){
                     // radial gradient
@@ -197,6 +203,17 @@ define([
                     var grd = Draw.ctx.createRadialGradient(center.x, center.y, lerp( 200, 40, ui.settings.field ), center.x, center.y, viewWidth*0.9);
                     grd.addColorStop(0, 'white');
                     grd.addColorStop(1, colors.greenLight);
+                    Draw
+                        .styles('fillStyle', grd)
+                        .rect(0, 0, viewWidth, viewHeight)
+                        .fill()
+                        ;
+                } else if ( ui.settings.fieldType === 'r2' ){
+                    // radial gradient
+                    Draw( renderer.layer('bg').ctx );
+                    var grd = Draw.ctx.createRadialGradient(center.x, center.y, lerp( 200, 40, ui.settings.field ), center.x, center.y, viewWidth*0.9);
+                    grd.addColorStop(0, colors.greenLight);
+                    grd.addColorStop(1, 'white');
                     Draw
                         .styles('fillStyle', grd)
                         .rect(0, 0, viewWidth, viewHeight)
@@ -213,9 +230,11 @@ define([
             }
             ,'change:fieldType': function( e, val ){
                 if ( val === 'magnetic' ){
-                    world.add( Bfield ).remove( Gfield );
+                    world.remove([ Gfield, R2field ]).add( Bfield );
+                } else if ( val === 'r2' ){
+                    world.remove([ Gfield, Bfield ]).add( R2field );
                 } else {
-                    world.add( Gfield ).remove( Bfield );
+                    world.remove([ Bfield, R2field ]).add( Gfield );
                 }
                 ui.emit('change:field', ui.settings.field);
             }
