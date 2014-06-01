@@ -38,15 +38,80 @@ html, body, #wrap-outer {
     }
 }
 
-#simulation,
-#controls {
+#viewport {
     width: 600px;
-    height: 500px;
     margin: auto;
 }
 
+#sun-bg {
+    display: none;
+}
+
+#sim-wrap.sun {
+    #simulation {
+        position: relative;
+        height: 460px;
+    }
+    #physics {
+        top: 110px;
+        left: 50%;
+        margin-left: -180px;
+        @include border-radius( 50% );
+    }
+    #sun-bg {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        margin-left: -280px;
+        width: 560px;
+        z-index: 0;
+    }
+}
+
+#sim-wrap.bottle {
+    #physics {
+        background: rgb(157, 188, 227);
+    }
+}
+
+#simulation {
+    height: 300px;
+}
+
+#sim-selector {
+    overflow: hidden;
+    > * {
+        margin: 1em 4em;
+    }
+}
+
+#bottle-image {
+    float: left;
+    width: 160px;
+    @include background(radial-gradient(rgb(241, 158, 51), #fff 70%));
+}
+#sun-image {
+    float: left;
+    width: 160px;
+}
+
+#us-image {
+    margin: 30px 0;
+    width: 200px;
+}
+
 #controls {
+    height: 20px;
+    font-size: 1.5em;
+    letter-spacing: 1px;
+    font-family: $font-family-comic;
     padding: 2em 0;
+
+    .column {
+        text-align: center;
+    }
+
     .field-type {
         overflow: hidden;
         margin-bottom: 2em;
@@ -63,5 +128,6 @@ html, body, #wrap-outer {
 }
 
 #simulation canvas {
-    border: 1px solid black;
+    // border: 1px solid black;
+    @include border-radius( 3px );
 }

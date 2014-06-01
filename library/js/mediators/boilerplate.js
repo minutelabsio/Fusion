@@ -15,7 +15,8 @@ define([
     'modules/magnetic.physicsjs',
     'modules/coulomb.physicsjs',
     'modules/particle.physicsjs',
-    'modules/strong-nuclear.physicsjs'
+    'modules/strong-nuclear.physicsjs',
+    'modules/fusion-monitor'
 ], function(
     $,
     TWEEN,
@@ -39,12 +40,15 @@ define([
         ,'blueDark': 'rgb(18, 84, 151)'
 
         ,'blueGlass': 'rgb(221, 249, 255)'
+        ,'blueBottle': 'rgb(157, 188, 227)'
 
         ,'blueFire': '#626ead'
 
         ,'green': 'rgb(121, 229, 0)'
         ,'greenLight': 'rgb(125, 242, 129)'
         ,'greenDark': 'rgb(64, 128, 0)'
+
+        ,'phdred': 'rgb(153, 43, 43)'
 
         ,'red': 'rgb(233, 63, 51)'
         ,'redLight': 'rgb(244, 183, 168)'
@@ -183,7 +187,7 @@ define([
                     ,vx: v.x
                     ,vy: v.y
                     ,mass: 1
-                    ,radius: 5
+                    ,radius: 10
                 }));
             }
         }
@@ -197,36 +201,36 @@ define([
                 Gfield.options.strength = GFieldStrength( val );
                 R2field.options.strength = R2FieldStrength( val );
 
-                if ( ui.settings.fieldType === 'gravity' ){
-                    // radial gradient
-                    Draw( renderer.layer('bg').ctx );
-                    var grd = Draw.ctx.createRadialGradient(center.x, center.y, lerp( 200, 40, ui.settings.field ), center.x, center.y, viewWidth*0.9);
-                    grd.addColorStop(0, 'white');
-                    grd.addColorStop(1, colors.greenLight);
-                    Draw
-                        .styles('fillStyle', grd)
-                        .rect(0, 0, viewWidth, viewHeight)
-                        .fill()
-                        ;
-                } else if ( ui.settings.fieldType === 'r2' ){
-                    // radial gradient
-                    Draw( renderer.layer('bg').ctx );
-                    var grd = Draw.ctx.createRadialGradient(center.x, center.y, lerp( 200, 40, ui.settings.field ), center.x, center.y, viewWidth*0.9);
-                    grd.addColorStop(0, colors.greenLight);
-                    grd.addColorStop(1, 'white');
-                    Draw
-                        .styles('fillStyle', grd)
-                        .rect(0, 0, viewWidth, viewHeight)
-                        .fill()
-                        ;
-                } else {
-                    Draw( renderer.layer('bg').ctx )
-                        .clear()
-                        .styles('fillStyle', adjustAlpha( colors.greenLight, lerp( 0, .8, val ) ))
-                        .rect(0, 0, viewWidth, viewHeight)
-                        .fill()
-                        ;
-                }
+                // if ( ui.settings.fieldType === 'gravity' ){
+                //     // radial gradient
+                //     Draw( renderer.layer('bg').ctx );
+                //     var grd = Draw.ctx.createRadialGradient(center.x, center.y, lerp( 200, 40, ui.settings.field ), center.x, center.y, viewWidth*0.9);
+                //     grd.addColorStop(0, 'white');
+                //     grd.addColorStop(1, colors.blueBottle);
+                //     Draw
+                //         .styles('fillStyle', grd)
+                //         .rect(0, 0, viewWidth, viewHeight)
+                //         .fill()
+                //         ;
+                // } else if ( ui.settings.fieldType === 'r2' ){
+                //     // radial gradient
+                //     Draw( renderer.layer('bg').ctx );
+                //     var grd = Draw.ctx.createRadialGradient(center.x, center.y, lerp( 200, 40, ui.settings.field ), center.x, center.y, viewWidth*0.9);
+                //     grd.addColorStop(0, colors.blueBottle);
+                //     grd.addColorStop(1, 'white');
+                //     Draw
+                //         .styles('fillStyle', grd)
+                //         .rect(0, 0, viewWidth, viewHeight)
+                //         .fill()
+                //         ;
+                // } else {
+                //     Draw( renderer.layer('bg').ctx )
+                //         .clear()
+                //         .styles('fillStyle', adjustAlpha( colors.blueBottle, lerp( 0, .8, val ) ))
+                //         .rect(0, 0, viewWidth, viewHeight)
+                //         .fill()
+                //         ;
+                // }
             }
             ,'change:fieldType': function( e, val ){
                 if ( val === 'magnetic' ){
@@ -258,27 +262,34 @@ define([
                     ,vx: v.x
                     ,vy: v.y
                     ,mass: 1
-                    ,radius: 5
+                    ,radius: 10
                 });
                 world.add( p );
                 particles.push( p );
             }
+            ,'change:simulation': function( e, val ){
+                ui.width = val === 'sun' ? 360 : 600;
+                ui.emit('resize');
+                $('#sim-wrap').removeClass('bottle sun').addClass( val );
+            }
         });
 
-        ui.emit('change:field', ui.settings.field);
+        ui.emit('change:fieldType', ui.settings.fieldType);
+        ui.emit('change:simulation', ui.settings.simulation);
 
+        var bangWords = ["BAM!", "THWAP!", "BANG!"];
         world.on('fusion', function( entity ){
             // create a little explosion animation
             var pos = Physics.vector().clone( entity.members[0].state.pos )
-                ,text = entity.name
+                ,text = bangWords[Math.random()*3|0] //entity.name
                 ,s = {
                     lineWidth: 3
-                    ,strokeStyle: 'rgba(136, 130, 0, 1)'
+                    ,strokeStyle: 'rgba(217, 199, 3, 1)'
                     ,shadowBlur: 10
                 }
                 ,textStyles = {
-                    font: '30px "latin-modern-mono-light", Courier, monospace'
-                    ,fillStyle: 'rgba(200, 0, 0, 1)'
+                    font: '30px "sf_cartoonist_hand", Helvetica, Arial, sans-serif' // '30px "latin-modern-mono-light", Courier, monospace'
+                    ,fillStyle: adjustAlpha(colors.phdred, 1)
                 }
                 ,ctx = renderer.layer('main').ctx
                 ;
@@ -311,10 +322,11 @@ define([
         // add things to the world
         world.add([
             Physics.behavior('interactive', { el: renderer.el })
+            ,Physics.behavior('fusion-monitor')
             ,Physics.behavior('sweep-prune')
             ,Physics.behavior('body-impulse-response')
             ,Physics.behavior('body-collision-detection')
-            ,Physics.behavior('strong-nuclear')
+            // ,Physics.behavior('strong-nuclear')
             //,edgeBounce
             ,attractor
             ,coulomb

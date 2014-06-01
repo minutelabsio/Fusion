@@ -1,0 +1,4 @@
+Show the effect of confinement time, temperature, and density. (triple point idea)
+show a zoom out view of the donut that glows with neutron color fog as more energy (neutrons) is produced.
+set initial conditions then let simulation run
+use deuterium and tritium
