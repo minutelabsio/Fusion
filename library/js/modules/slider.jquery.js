@@ -36,7 +36,7 @@ define(['jquery'], function( $ ){
                 ,options = $.extend({
                     min: parseFloat($this.attr('data-min')) || 0
                     ,max: parseFloat($this.attr('data-max')) || 1
-                    ,value: parseFloat($this.attr('data-value')) || 0.5
+                    ,value: parseFloat($this.attr('data-value'))
                 }, opts)
                 ,factor = options.max - options.min
                 ,val = (options.value - options.min) / factor
