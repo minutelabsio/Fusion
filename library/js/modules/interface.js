@@ -2,12 +2,14 @@ define([
     'jquery',
     'modules/slider.jquery',
     'hammer.jquery',
+    'vendor/color.jquery',
     'moddef'
 
 ], function(
     $,
     _slider,
     _hjq,
+    _cjq,
     M
 ){
     'use strict';
@@ -64,6 +66,23 @@ define([
             this.$el.hammer().on('touch', '#ctrl-add', function( e ){
                 e.preventDefault();
                 self.emit('add');
+            }).on('touch', '#ctrl-restart', function( e ){
+                e.preventDefault();
+                self.emit('restart');
+            });
+
+            this.on('collision-counter', function( e, val ){
+
+                self.$el.find('.col-counter data')
+                    .html( val|0 )
+                    .stop()
+                    .css({
+                        'color': 'rgb(236, 29, 29)'
+                    })
+                    .animate({
+                        'color': 'rgb(67, 67, 67)'
+                    }, 2000)
+                    ;
             });
 
             //simulation selector

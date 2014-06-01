@@ -7,7 +7,6 @@ define([
     'physicsjs/renderers/canvas',
     'physicsjs/behaviors/body-impulse-response',
     'physicsjs/behaviors/body-collision-detection',
-    'physicsjs/behaviors/edge-collision-detection',
     'physicsjs/behaviors/sweep-prune',
     'physicsjs/behaviors/attractor',
     'physicsjs/behaviors/interactive',
@@ -83,16 +82,21 @@ define([
         return (b-a)*p + a;
     }
 
+    function gauss( mean, stddev ){
+        var r = 2 * (Math.random() + Math.random() + Math.random()) - 3;
+        return r * stddev + mean;
+    }
+
     function BFieldStrength( v ){
-        return lerp(0.0001, 0.1, v);
+        return lerp(0.0001, 0.01, v);
     }
 
     function GFieldStrength( v ){
-        return lerp(2, 60, v);
+        return lerp(2, 80, v);
     }
 
     function R2FieldStrength( v ){
-        return lerp(1e-8, 1e-7, v);
+        return lerp(0, 5e-7, v);
     }
 
     function simulation( world ) {
@@ -104,7 +108,6 @@ define([
             ,viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight)
             ,center = Physics.vector(viewWidth/2, viewHeight/2)
             ,attractor = Physics.behavior('attractor', { pos: center, min: viewWidth/2, strength: 1e-8, order: -2 })
-            ,edgeBounce
             ,renderer
             ,coulomb = Physics.behavior('coulomb', { strength: 7 })
             ,Bfield = Physics.behavior('magnetic', { strength: BFieldStrength(ui.settings.field) })
@@ -144,13 +147,6 @@ define([
             }
         });
 
-        // constrain objects to these bounds
-        edgeBounce = Physics.behavior('edge-collision-detection', {
-            aabb: viewportBounds
-            ,restitution: 0.99
-            ,cof: 0.8
-        });
-
         // resize events
         ui.on('resize', function () {
 
@@ -160,43 +156,58 @@ define([
             renderer.resize( viewWidth, viewHeight );
 
             viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight);
-            // update the boundaries
-            edgeBounce.setAABB(viewportBounds);
 
             center.set(viewWidth, viewHeight).mult(0.5);
+            R2field.options({pos:center});
         });
 
-        // create some protons
-        var l = 0, x, y, add, pos = Physics.vector(), v;
-        var particles = [];
-        while( l < 20 ){
-            add = true;
-            pos.set(viewWidth * Math.random(), viewHeight  * Math.random());
-            for ( var i = 0, l = particles.length; i < l; i++ ){
-                if ( particles[i].state.pos.dist(pos) <= 80 ){
-                    add = false;
-                    break;
-                }
-            }
-
-            if ( add ){
-                v = Physics.vector(1, 0).rotate(Math.random()*2*Math.PI).mult( 0.05 * Math.random() );
-                l = particles.push( Physics.body('particle', {
-                    x: pos.x
-                    ,y: pos.y
-                    ,vx: v.x
-                    ,vy: v.y
-                    ,mass: 1
-                    ,radius: 10
-                }));
-            }
-        }
-
-        world.add(particles);
-
+        var collisions = 0;
         var lastE = 1;
         ui.on({
-            'change:field': function( e, val ){
+            'restart': function(){
+                collisions = 0;
+                // remove all particles
+                var old = world.find({ name: 'particle' });
+                if ( old.length ) {
+                    world.remove( old );
+                }
+
+                // create some protons
+                var l = 0, x, y, add, pos = Physics.vector(), v;
+                var density = ui.settings.density;
+                var T = ui.settings.energy;
+                var particles = [];
+                var tries = 100;
+                while( l < 20 && tries > 0 ){
+                    add = true;
+                    pos.set(viewWidth * Math.random(), viewHeight  * Math.random());
+                    for ( var i = 0, l = particles.length; i < l; i++ ){
+                        if ( particles[i].state.pos.dist(pos) <= lerp(200, 25, density) ){
+                            add = false;
+                            break;
+                        }
+                    }
+
+                    if ( add ){
+                        tries = 100;
+                        v = Physics.vector(1, 0).rotate(Math.random()*2*Math.PI).mult( gauss(Math.sqrt(T)/3, Math.sqrt(T)/10) );
+                        l = particles.push( Physics.body('particle', {
+                            x: pos.x
+                            ,y: pos.y
+                            ,vx: v.x
+                            ,vy: v.y
+                            ,mass: 1
+                            ,radius: 10
+                        }));
+                    } else {
+                        tries--;
+                    }
+                }
+
+                world.add(particles);
+                ui.emit('collision-counter', collisions);
+            }
+            ,'change:field': function( e, val ){
                 Bfield.options.strength = BFieldStrength( val );
                 Gfield.options.strength = GFieldStrength( val );
                 R2field.options.strength = R2FieldStrength( val );
@@ -232,49 +243,28 @@ define([
                 //         ;
                 // }
             }
-            ,'change:fieldType': function( e, val ){
-                if ( val === 'magnetic' ){
-                    world.remove([ Gfield, R2field ]).add( Bfield );
-                } else if ( val === 'r2' ){
-                    world.remove([ Gfield, Bfield ]).add( R2field );
-                } else {
-                    world.remove([ Bfield, R2field ]).add( Gfield );
-                }
-                ui.emit('change:field', ui.settings.field);
-            }
             ,'change:energy': function( e, val ){
-                var scale = Math.sqrt(val/lastE);
-                lastE = val;
-                for ( var i = 0, l = particles.length; i < l; i++ ){
-                    particles[ i ].state.vel.mult( scale );
-                }
-            }
-            ,'add': function( e ){
-                var tries = 100;
-                do {
-                    pos.set(viewWidth * Math.random(), viewHeight  * Math.random());
-                } while ( tries-- && world.findOne({ $at: pos }) );
-
-                v = Physics.vector(1, 0).rotate(Math.random()*2*Math.PI).mult( Math.sqrt(ui.settings.energy) * 0.5 * Math.random() );
-                var p = Physics.body('particle', {
-                    x: pos.x
-                    ,y: pos.y
-                    ,vx: v.x
-                    ,vy: v.y
-                    ,mass: 1
-                    ,radius: 10
-                });
-                world.add( p );
-                particles.push( p );
+                // var scale = Math.sqrt(val/lastE);
+                // lastE = val;
+                // for ( var i = 0, l = particles.length; i < l; i++ ){
+                //     particles[ i ].state.vel.mult( scale );
+                // }
             }
             ,'change:simulation': function( e, val ){
                 ui.width = val === 'sun' ? 360 : 600;
                 ui.emit('resize');
                 $('#sim-wrap').removeClass('bottle sun').addClass( val );
+
+                if ( val === 'sun' ){
+                    world.remove( Bfield ).add( R2field );
+                } else {
+                    world.remove( R2field ).add( Bfield );
+                }
+
+                ui.emit('restart');
             }
         });
 
-        ui.emit('change:fieldType', ui.settings.fieldType);
         ui.emit('change:simulation', ui.settings.simulation);
 
         var bangWords = ["BAM!", "THWAP!", "BANG!"];
@@ -316,22 +306,23 @@ define([
                 .start()
                 ;
 
-            ui.emit('add');
+            collisions++;
+            ui.emit('collision-counter', collisions);
         });
 
         // add things to the world
         world.add([
-            Physics.behavior('interactive', { el: renderer.el })
-            ,Physics.behavior('fusion-monitor')
+            Physics.behavior('fusion-monitor')
             ,Physics.behavior('sweep-prune')
             ,Physics.behavior('body-impulse-response')
             ,Physics.behavior('body-collision-detection')
             // ,Physics.behavior('strong-nuclear')
-            //,edgeBounce
-            ,attractor
+            // ,attractor
             ,coulomb
             // ,Bfield
-            ,Gfield
+            // ,Gfield
+            //,Physics.behavior('interactive', { el: renderer.el })
+
         ]);
 
         // subscribe to ticker to advance the simulation

@@ -1,49 +1,47 @@
 ---
 layout: embed
 ---
-<div id="sim-wrap">
+<div id="sim-wrap" class="bottle">
+    <h3>Choose your Container</h3>
     <div id="sim-selector">
         <img class="sel" data-value="bottle" src="{{site.library_path}}/images/bottle.png" id="bottle-image" />
+        <img class="sel" data-value="bottle" src="{{site.library_path}}/images/bottle-bw.png" id="bottle-image-bw" />
         <img class="sel" data-value="sun" src="{{site.library_path}}/images/sun.png" id="sun-image" />
+        <img class="sel" data-value="sun" src="{{site.library_path}}/images/sun-bw.png" id="sun-image-bw" />
     </div>
 
     <div id="simulation">
         <img src="{{site.library_path}}/images/sun.png" id="sun-bg"/>
-        <canvas id="physics"></canvas>
+        <canvas id="physics" width="600" height="300"></canvas>
     </div>
 
     <div id="controls">
 
         <div class="row">
-            <div class="column four">
-
+            <div class="column six">
+                <div class="col-counter">
+                    <label>Fusion events:</label><data>0</data>
+                </div>
                 <img src="{{site.library_path}}/images/us.png" id="us-image" />
+                <img src="{{site.library_path}}/images/arturo-sun.png" id="arturo-sun-image" />
+                <img src="{{site.library_path}}/images/jorge-sun.png" id="jorge-sun-image" />
             </div>
-            <div class="column six last push-one">
+            <div class="column six last">
                 <label>Temperature</label>
                 <div class="slider" data-name="energy" data-min="0.1" data-max="10" data-value="1"></div>
 
                 <label>Confinement</label>
-                <div class="slider" data-name="field" data-value="0.2"></div>
+                <div class="slider" data-name="field" data-value="0"></div>
 
                 <label>Density</label>
-                <div class="slider" data-name="density" data-min="0.1" data-max="10" data-value="1"></div>
+                <div class="slider" data-name="density" data-value="0"></div>
+
+                <button id="ctrl-restart" class="ok">Restart</button>
             </div>
 
         </div>
 
-        <div class="row field-type" style="visibility: hidden;">
-            <div class="column three">
-                <label>Field Type</label>
-            </div>
-            <div class="column last nine">
-                <div class="radio-group" data-name="fieldType">
-                    <a href="#" data-value="gravity">Gravitational Field</a>
-                    <a href="#" data-value="magnetic" class="on">Magnetic Field</a>
-                    <a href="#" data-value="r2">"Spring" Field</a>
-                </div>
-            </div>
-        </div>
+
         <!-- <div class="row">
             <button id="ctrl-add">Add a proton</button>
         </div> -->
