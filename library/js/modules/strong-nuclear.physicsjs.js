@@ -81,15 +81,24 @@ define([
                     ;
 
                 // check max velocity
-                if ( bodyA.state.vel.dist( bodyB.state.vel ) > self.options.maxVel ){
-                    return;
-                }
+                // if ( bodyA.state.vel.dist( bodyB.state.vel ) > self.options.maxVel ){
+                //     return;
+                // }
 
                 // two solitary particles
                 if ( !bodyA.entity && !bodyB.entity ){
 
                     // change one into a neutron
                     bodyA.ptype = 'neutron';
+
+                    var positron = Physics.body('particle', {
+                        ptype: 'positron'
+                        ,x: bodyA.x
+                        ,y: bodyA.y
+                    });
+
+                    positron.state.vel.set(3, 0).rotate(Math.PI * 2 * Math.random());
+                    this._world.add( positron );
 
                     this.createEntity('H2', [bodyA, bodyB]);
                     this._world.emit('fusion', bodyA.entity);
@@ -145,15 +154,22 @@ define([
                 var cols = data.collisions, c;
                 for (var i = 0, l = cols.length; i < l; i++){
                     c = cols[i];
-                    if ( c.bodyA.name === 'particle' && c.bodyB.name === 'particle' ){
-                        this.checkFusion(c.bodyA, c.bodyB);
-                    }
 
                     // if two fused particles are colliding, then ignore the collision
-                    if (c.bodyA.entity && c.bodyA.entity === c.bodyB.entity){
+                    if (
+                        c.bodyA.entity && c.bodyA.entity === c.bodyB.entity ||
+                        // if one is a neutrino or positron... ignore
+                        c.bodyA.ptype === 'neutrino' || c.bodyB.ptype === 'neutrino' ||
+                        c.bodyA.ptype === 'positron' || c.bodyB.ptype === 'positron'
+                    ){
                         cols.splice(i, 1);
                         l--;
                         i--;
+                        continue;
+                    }
+
+                    if ( c.bodyA.name === 'particle' && c.bodyB.name === 'particle' ){
+                        this.checkFusion(c.bodyA, c.bodyB);
                     }
                 }
             }

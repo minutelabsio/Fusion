@@ -15,11 +15,11 @@ define([
     'use strict';
 
     var Module = M({
-        constructor: function(){
+        constructor: function( opts ){
 
             var self = this;
-            this.width = 600; //window.innerWidth;
-            this.height = 300; //window.innerHeight;
+            this.width = opts.width || 600; //window.innerWidth;
+            this.height = opts.height || 600; //window.innerHeight;
 
             $(window).on('resize', function(){
                 // self.width = 600; //window.innerWidth;
@@ -27,12 +27,10 @@ define([
                 self.emit('resize');
             });
 
-            this.$el = $('#controls');
+            this.$el = $( opts.el );
 
             // default settings
-            this.settings = {
-                simulation: 'bottle'
-            };
+            this.settings = {};
 
             this.$el.find('.slider').slider().each(function(){
                 self.settings[ $(this).attr('data-name') ] = parseFloat($(this).attr('data-value'));
@@ -85,20 +83,10 @@ define([
                     ;
             });
 
-            //simulation selector
-            $('#sim-selector').on('click', '.sel', function(){
-                var $this = $(this)
-                    ,val = $this.attr('data-value')
-                    ;
-
-                self.settings['simulation'] = val;
-                self.emit('change:simulation', val);
-            });
-
         }
     }, ['events']);
 
-    return function( world ){
-        return new Module( world );
+    return function( opts ){
+        return new Module( opts );
     };
 });

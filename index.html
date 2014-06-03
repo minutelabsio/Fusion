@@ -1,49 +1,32 @@
 ---
 layout: embed
 ---
+<img width="600" src="{{site.library_path}}/images/FPO-video.png"/>
 <div id="sim-wrap" class="bottle">
-    <h3>Choose your Container</h3>
-    <div id="sim-selector">
-        <img class="sel" data-value="bottle" src="{{site.library_path}}/images/bottle.png" id="bottle-image" />
-        <img class="sel" data-value="bottle" src="{{site.library_path}}/images/bottle-bw.png" id="bottle-image-bw" />
-        <img class="sel" data-value="sun" src="{{site.library_path}}/images/sun.png" id="sun-image" />
-        <img class="sel" data-value="sun" src="{{site.library_path}}/images/sun-bw.png" id="sun-image-bw" />
-    </div>
 
-    <div id="simulation">
-        <img src="{{site.library_path}}/images/sun.png" id="sun-bg"/>
-        <canvas id="physics" width="600" height="300"></canvas>
-    </div>
+    <div id="sun-simulation" class="simulation">
 
-    <div id="controls">
+        <div class="view">
+            <canvas width="600" height="600"></canvas>
+        </div>
 
-        <div class="row">
-            <div class="column six">
-                <div class="col-counter">
-                    <label>Fusion events:</label><data>0</data>
-                </div>
-                <img src="{{site.library_path}}/images/us.png" id="us-image" />
-                <img src="{{site.library_path}}/images/arturo-sun.png" id="arturo-sun-image" />
-                <img src="{{site.library_path}}/images/jorge-sun.png" id="jorge-sun-image" />
-            </div>
-            <div class="column six last">
-                <label>Temperature</label>
-                <div class="slider" data-name="energy" data-min="0.1" data-max="10" data-value="1"></div>
+        <div class="controls">
 
-                <label>Confinement</label>
-                <div class="slider" data-name="field" data-value="0"></div>
-
-                <label>Density</label>
-                <div class="slider" data-name="density" data-value="0"></div>
-
+            <div>
                 <button id="ctrl-restart" class="ok">Restart</button>
             </div>
 
+            <label>Temperature</label>
+            <div class="slider" data-name="energy" data-min="0.1" data-max="10" data-value="1"></div>
+
+            <label>Confinement</label>
+            <div class="slider" data-name="field" data-value="0.15"></div>
+
+            <label>Density</label>
+            <div class="slider" data-name="density" data-value="0.3"></div>
+
         </div>
-
-
-        <!-- <div class="row">
-            <button id="ctrl-add">Add a proton</button>
-        </div> -->
     </div>
+
+
 </div>

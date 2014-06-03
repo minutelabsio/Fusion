@@ -3,6 +3,10 @@
 @import '_vars';
 @import '_slider';
 
+@include font-face('PHD', font-files('webfontkit-PHD/jorge_v03-webfont.ttf', 'webfontkit-PHD/jorge_v03-webfont.svg#PHDregular'), 'webfontkit-PHD/jorge_v03-webfont.eot', normal, normal);
+@include font-face('PHD', inline-font-files('webfontkit-PHD/jorge_v03-webfont.woff', woff), $weight: normal, $style: normal);
+
+
 html, body, #wrap-outer {
     height: 100%;
 }
@@ -41,151 +45,59 @@ html, body, #wrap-outer {
 #viewport {
     width: 600px;
     margin: auto;
-}
-
-#sun-bg {
-    display: none;
-}
-
-#arturo-sun-image,
-#jorge-sun-image {
-    display: none;
+    padding: 5px;
+    border: 7px solid black;
 }
 
 #sim-wrap {
-    h3 {
-        text-align: center;
-        font-family: $font-family-comic;
-        font-weight: normal;
-        letter-spacing: 1px;
-        font-size: 28px;
-        margin: 1em 0;
-    }
-}
-
-#sim-wrap.sun {
-    #simulation {
+    .simulation {
         position: relative;
-        height: 460px;
+        width: 600px;
+        height: 620px;
     }
-    #physics {
-        top: 110px;
+
+    .controls {
+        position: absolute;
+        bottom: 0px;
+        right: 5px;
+        z-index: 2;
+        width: 180px;
+    }
+
+    .view {
+        position: absolute;
+        top: 78px;
         left: 50%;
-        margin-left: -180px;
+        z-index: 1;
+        width: 400px;
+        height: 400px;
+        overflow: hidden;
+        margin-left: -194px;
         @include border-radius( 50% );
     }
-    #sun-bg {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 50%;
-        margin-left: -280px;
-        width: 560px;
-        z-index: 0;
-    }
-    #us-image {
-        display: none;
-    }
-    #arturo-sun-image,
-    #jorge-sun-image {
-        display: block;
-        width: 100px;
-        float: left;
-    }
-    #arturo-sun-image {
-        padding-top: 20px;
-    }
 }
 
-#sim-wrap.bottle {
-    #physics {
-        background: rgb(157, 188, 227);
-    }
+#sun-simulation {
+    background: image-url('bg-sun.png') no-repeat center center;
+    background-size: 100%;
 }
 
-#simulation {
-    height: 300px;
-}
+.controls {
+    color: #000;
+    text-align: right;
+    font-size: 20px;
+    line-height: 0.666666;
+    font-family: 'PHD';
 
-#sim-selector {
-    overflow: hidden;
-    text-align: center;
-    > * {
-        cursor: pointer;
-        margin: 0 2em;
-        display: inline-block;
-    }
-}
-
-#bottle-image,
-#bottle-image-bw {
-    border: 1px solid rgba(255,255,255,0);
-    padding: 17px 16px 17px 14px;
-    width: 160px;
-    // @include background(radial-gradient(rgb(241, 158, 51), #fff 70%));
-}
-#sun-image,
-#sun-image-bw {
-    border: 1px solid rgba(255,255,255,0);
-    width: 160px;
-}
-
-#sun-image-bw:hover,
-#bottle-image-bw:hover {
-    border: 1px solid $blue;
-    @include border-radius( 3px );
-}
-
-#sim-wrap.bottle {
-    #bottle-image-bw,
-    #sun-image {
-        display: none;
-    }
-    #sun-image-bw,
-    #bottle-image {
-        display: inline-block;
-    }
-
-    #bottle-image {
-        border: 1px solid $blue;
-        @include border-radius( 3px );
-    }
-}
-
-#sim-wrap.sun {
-    #bottle-image-bw,
-    #sun-image {
-        display: inline-block;
-    }
-    #sun-image-bw,
-    #bottle-image {
-        display: none;
-    }
-    #sun-image {
-        border: 1px solid $blue;
-        @include border-radius( 3px );
-    }
-}
-
-#us-image {
-    float: left;
-    width: 200px;
-}
-
-#controls {
-    overflow:hidden;
-    font-size: 1.5em;
-    letter-spacing: 1px;
-    font-family: $font-family-comic;
-    padding: 2em 0 2em;
-
-    .sun & {
-        padding-top: 2em;
+    label {
+        padding-right: 1em;
     }
 
     button {
-        font-family: $font-family-comic;
+        font-family: 'PHD';
         font-size: 0.8em;
+        margin-bottom: 1em;
+        margin-right: 1em;
     }
 
     .slider {
@@ -220,13 +132,4 @@ html, body, #wrap-outer {
             }
         }
     }
-}
-
-#simulation {
-    margin-top: 1em;
-}
-
-#simulation canvas {
-    // border: 1px solid black;
-    @include border-radius( 3px );
 }
