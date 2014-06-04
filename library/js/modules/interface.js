@@ -69,6 +69,10 @@ define([
                 self.emit('restart');
             });
 
+            $('.phdbtn').on('click', function( e ){
+                e.preventDefault();
+            });
+
             this.on('collision-counter', function( e, val ){
 
                 self.$el.find('.col-counter data')

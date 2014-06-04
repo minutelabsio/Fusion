@@ -2,9 +2,21 @@
 layout: embed
 ---
 <img width="600" src="{{site.library_path}}/images/FPO-video.png"/>
+<div id="intro-cta" class="row">
+    <div class="column five">
+        <p>Play the movie to learn about fusion...</p>
+    </div>
+    <div class="column seven last">
+        <p>...or play with the simulations to make fusion!</p>
+    </div>
+</div>
 <div id="sim-wrap" class="bottle">
 
     <div id="sun-simulation" class="simulation">
+
+        <div class="help">
+            In the sun, gravitational pressure keeps the particles from flying away, increasing the chances of fusion collisions happening.
+        </div>
 
         <div class="view">
             <canvas width="600" height="600"></canvas>
@@ -13,7 +25,7 @@ layout: embed
         <div class="controls">
 
             <div>
-                <button id="ctrl-restart" class="ok">Restart</button>
+                <a href="#" id="ctrl-restart" class="phdbtn">Restart</a>
             </div>
 
             <label>Temperature</label>

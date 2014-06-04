@@ -43,13 +43,56 @@ html, body, #wrap-outer {
 }
 
 #viewport {
+    color: #000;
+    line-height: 0.666666;
+    font-family: 'PHD';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-size: 20px;
     width: 600px;
     margin: auto;
     padding: 5px;
     border: 7px solid black;
 }
 
+#intro-cta {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    font-size: 27px;
+    width: 460px;
+    margin: auto;
+    p {
+        margin: 1em 0 0.8em;
+    }
+
+    .column {
+        position: relative;
+    }
+
+    .column:after {
+        position: absolute;
+        top: 5px;
+        left: -48px;
+        content: '';
+        background: image-url('curvy-arrow-up.png') no-repeat center center;
+        background-size: 100%;
+        width: 40px;
+        height: 50px;
+    }
+
+    .last:after {
+        top: 40px;
+        left: auto;
+        right: -34px;
+        background: image-url('curvy-arrow-down.png') no-repeat center center;
+        background-size: 100%;
+    }
+}
+
 #sim-wrap {
+    clear: both;
+
     .simulation {
         position: relative;
         width: 600px;
@@ -80,6 +123,47 @@ html, body, #wrap-outer {
 #sun-simulation {
     background: image-url('bg-sun.png') no-repeat center center;
     background-size: 100%;
+
+    .help {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding: 20px 30px;
+    }
+
+    &:after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 15px;
+        z-index: 1;
+        background: image-url('fg-jorge-arturo.png') no-repeat center center;
+        background-size: 100%;
+        width: 185px;
+        height: 185px;
+    }
+}
+
+.phdbtn {
+    display: inline-block;
+    padding: 0.6em 0.8em 0.3em;
+    // border: 1px solid darken(#00bff3, 15);
+    background: #000;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+
+    @include border-radius( 3px );
+
+    &:hover {
+        color: #fff;
+        background: darken(#00bff3, 10);
+    }
+
+    &:active {
+        background: #000;
+    }
 }
 
 .controls {
@@ -93,9 +177,8 @@ html, body, #wrap-outer {
         padding-right: 1em;
     }
 
-    button {
+    .phdbtn {
         font-family: 'PHD';
-        font-size: 0.8em;
         margin-bottom: 1em;
         margin-right: 1em;
     }
@@ -131,5 +214,20 @@ html, body, #wrap-outer {
                 }
             }
         }
+    }
+
+    &:before {
+        content: 'Play with the knobs, see what happens!';
+        width: 150px;
+        position: absolute;
+        bottom: 30px;
+        left: -220px;
+        font-size: 22px;
+        line-height: .67;
+        text-align: center;
+        padding-right: 40px;
+        padding-bottom: 10px;
+        background: image-url('curvy-arrow.png') no-repeat right center;
+        background-size: 34px;
     }
 }
