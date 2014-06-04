@@ -87,7 +87,7 @@ define([
     }
 
     function BFieldStrength( v ){
-        return lerp(0.0001, 0.01, v);
+        return lerp(0.0001, 0.05, v);
     }
 
     function GFieldStrength( v ){
@@ -95,22 +95,60 @@ define([
     }
 
     function R2FieldStrength( v ){
-        return lerp(0, 5e-7, v);
+        return lerp(0, 2e-8, v);
     }
 
-    function sunSimulation( world ) {
+    function fusionEvent( entity ){
 
-        var el = $('#sun-simulation')
-            ,ui = Interface({ el: el.find('.controls:first'), width: 400, height: 400 })
+        // give the fused particle energy
+        entity.members[0].state.vel.mult( 40 );
+
+        // create a little explosion animation
+        var pos = Physics.vector().clone( entity.members[0].state.pos )
+            ,text = entity.name
+            ,s = {
+                lineWidth: 3
+                ,strokeStyle: 'rgba(219, 135, 1, 0.98)'
+                ,shadowBlur: 10
+            }
+            ,textStyles = {
+                font: '30px "PHD", "sf_cartoonist_hand", Helvetica, Arial, sans-serif' // '30px "latin-modern-mono-light", Courier, monospace'
+                ,fillStyle: adjustAlpha(colors.phdred, 1)
+            }
+            ,ctx = this.renderer().layer('main').ctx
+            ;
+
+        new TWEEN.Tween({ r: 1, opacity: 1 })
+            .to( { r: 600, opacity: 0 }, 1000 )
+            .easing( TWEEN.Easing.Linear.None )
+            .onUpdate(function () {
+
+                s.strokeStyle = s.shadowColor = s.strokeStyle.replace( /[^,]*\)$/, this.opacity + ')' );
+                Draw( ctx ).styles( s ).circle( pos.x, pos.y, this.r );
+
+            })
+            .start()
+            ;
+
+        new TWEEN.Tween({ dy: 0, opacity: 1 })
+            .to({ dy: -50, opacity: 0 }, 1500)
+            .easing( TWEEN.Easing.Linear.None )
+            .onUpdate(function(){
+                textStyles.fillStyle = textStyles.fillStyle.replace( /[^,]*\)$/, this.opacity + ')' );
+                Draw( ctx ).styles( textStyles ).text( text, pos.x, pos.y + this.dy );
+            })
+            .start()
+            ;
+    }
+
+    function simulation( world, ui, el, field ){
+        var renderer
             ,viewWidth = ui.width
             ,viewHeight = ui.height
-            ,renderer
             // bounds of the window
             ,viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight)
             ,center = Physics.vector(viewWidth/2, viewHeight/2)
-            ,coulomb = Physics.behavior('coulomb', { strength: 10, min: 5 })
-            ,Bfield = Physics.behavior('magnetic', { strength: BFieldStrength(ui.settings.field) })
-            ,R2field = Physics.behavior('attractor', { pos: center, min: 80, strength: R2FieldStrength(ui.settings.field), order: -2 })
+            ,coulomb = Physics.behavior('coulomb', { strength: 2/world.timestep(), min: 5 })
             ;
 
         // create a renderer
@@ -154,14 +192,21 @@ define([
             viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight);
 
             center.set(viewWidth, viewHeight).mult(0.5);
-            R2field.options({ pos:center });
+            field.options({ pos:center });
         });
 
-        var collisions = 0;
         var lastE = 1;
         ui.on({
-            'restart': function(){
-                collisions = 0;
+            'change:energy': function( e, val ){
+                var E = val/lastE;
+                var particles = world.find({ name: 'particle' });
+                for ( var i = 0, l = particles.length; i < l; i++ ){
+                    particles[ i ].state.vel.mult( Math.sqrt(E) );
+                }
+                lastE = val;
+            }
+            ,'restart': function(){
+                lastE = ui.settings.energy;
                 // remove all particles
                 var old = world.find({ name: 'particle' });
                 if ( old.length ) {
@@ -171,7 +216,7 @@ define([
                 // create some protons
                 var l = 0, x, y, add, pos = Physics.vector(), v;
                 var density = ui.settings.density;
-                var T = ui.settings.energy;
+                var T = ui.settings.energy/world.timestep();
                 var particles = [];
                 var tries = 100;
                 while( l < 20 && tries > 0 ){
@@ -186,7 +231,7 @@ define([
 
                     if ( add ){
                         tries = 100;
-                        v = Physics.vector(1, 0).rotate(Math.random()*2*Math.PI).mult( gauss(Math.sqrt(T)/3, Math.sqrt(T)/10) );
+                        v = Physics.vector(1, 0).rotate(Math.random()*2*Math.PI).mult( gauss(Math.sqrt(T)/8, Math.sqrt(T)/10) );
                         l = particles.push( Physics.body('particle', {
                             x: pos.x
                             ,y: pos.y
@@ -201,60 +246,11 @@ define([
                 }
 
                 world.add(particles);
-                R2field.applyTo(particles);
-                ui.emit('collision-counter', collisions);
-            }
-            ,'change:field': function( e, val ){
-
-                R2field.options.strength = R2FieldStrength(val);
+                field.applyTo(particles);
             }
         });
 
-        world.on('fusion', function( entity ){
-
-            // give the fused particle energy
-            entity.members[0].state.vel.mult( 40 );
-
-            // create a little explosion animation
-            var pos = Physics.vector().clone( entity.members[0].state.pos )
-                ,text = entity.name
-                ,s = {
-                    lineWidth: 3
-                    ,strokeStyle: 'rgba(219, 135, 1, 0.98)'
-                    ,shadowBlur: 10
-                }
-                ,textStyles = {
-                    font: '30px "PHD", "sf_cartoonist_hand", Helvetica, Arial, sans-serif' // '30px "latin-modern-mono-light", Courier, monospace'
-                    ,fillStyle: adjustAlpha(colors.phdred, 1)
-                }
-                ,ctx = renderer.layer('main').ctx
-                ;
-
-            new TWEEN.Tween({ r: 1, opacity: 1 })
-                .to( { r: 600, opacity: 0 }, 1000 )
-                .easing( TWEEN.Easing.Linear.None )
-                .onUpdate(function () {
-
-                    s.strokeStyle = s.shadowColor = s.strokeStyle.replace( /[^,]*\)$/, this.opacity + ')' );
-                    Draw( ctx ).styles( s ).circle( pos.x, pos.y, this.r );
-
-                })
-                .start()
-                ;
-
-            new TWEEN.Tween({ dy: 0, opacity: 1 })
-                .to({ dy: -50, opacity: 0 }, 1500)
-                .easing( TWEEN.Easing.Linear.None )
-                .onUpdate(function(){
-                    textStyles.fillStyle = textStyles.fillStyle.replace( /[^,]*\)$/, this.opacity + ')' );
-                    Draw( ctx ).styles( textStyles ).text( text, pos.x, pos.y + this.dy );
-                })
-                .start()
-                ;
-
-            collisions++;
-            ui.emit('collision-counter', collisions);
-        });
+        world.on('fusion', fusionEvent, world);
 
         // add things to the world
         world.add([
@@ -262,7 +258,7 @@ define([
             ,Physics.behavior('body-impulse-response')
             ,Physics.behavior('body-collision-detection')
             ,Physics.behavior('strong-nuclear')
-            ,R2field
+            ,field
             ,coulomb
         ]);
 
@@ -278,6 +274,37 @@ define([
         ui.emit('restart');
     }
 
+    function sunSimulation( world ) {
+
+        var el = $('#sun-simulation')
+            ,ui = Interface({ el: el.find('.controls:first'), width: 400, height: 400 })
+            ,field = Physics.behavior('attractor', { pos: Physics.vector(ui.width/2, ui.width/2), min: 80, strength: R2FieldStrength(ui.settings.field), order: -2 })
+            ;
+
+        ui.on('change:field', function( e, val ){
+
+            field.options.strength = R2FieldStrength(val);
+        });
+
+        simulation( world, ui, el, field );
+    }
+
+    function bottleSimulation( world ) {
+
+        var el = $('#bottle-simulation')
+            ,ui = Interface({ el: el.find('.controls:first'), width: 450, height: 450 })
+            ,field = Physics.behavior('magnetic', { strength: BFieldStrength(ui.settings.field) })
+            ;
+
+        ui.on('change:field', function( e, val ){
+
+            field.options.strength = BFieldStrength(val);
+        });
+
+        simulation( world, ui, el, field );
+    }
+
     // wait for domready, then initialize
-    Physics({ timestep: 0.2 }, [ domready, sunSimulation ]);
+    Physics({ timestep: 6 }, [ domready, sunSimulation ]);
+    Physics({ timestep: 0.2 }, [ domready, bottleSimulation ]);
 });

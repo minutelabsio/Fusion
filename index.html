@@ -29,13 +29,45 @@ layout: embed
             </div>
 
             <label>Temperature</label>
-            <div class="slider" data-name="energy" data-min="0.1" data-max="10" data-value="1"></div>
+            <div class="slider" data-name="energy" data-min="0.1" data-max="10" data-value="2"></div>
 
             <label>Confinement</label>
             <div class="slider" data-name="field" data-value="0.15"></div>
 
             <label>Density</label>
             <div class="slider" data-name="density" data-value="0.3"></div>
+
+        </div>
+    </div>
+
+    <div id="mid-help">
+        Fusion occurs at critical combinations of Temperature, Confinement Strength and Particle Density.
+    </div>
+
+    <div id="bottle-simulation" class="simulation">
+
+        <div class="help">
+            Magnetic Confinement Fusion reactors use a donut-shaped spiraling magnetic field that traps the particles along the field lines.
+        </div>
+
+        <div class="view">
+            <canvas width="600" height="600"></canvas>
+        </div>
+
+        <div class="controls">
+
+            <div>
+                <a href="#" id="ctrl-restart" class="phdbtn">Restart</a>
+            </div>
+
+            <label>Temperature</label>
+            <div class="slider" data-name="energy" data-min="0.1" data-max="10" data-value="0.1"></div>
+
+            <label>Confinement</label>
+            <div class="slider" data-name="field" data-value="0.8"></div>
+
+            <label>Density</label>
+            <div class="slider" data-name="density" data-value="0.6"></div>
 
         </div>
     </div>
