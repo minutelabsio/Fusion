@@ -1,5 +1,7 @@
 define([
+    'require',
     'jquery',
+    'vendor/viewport.jquery',
     'tween',
     'modules/canvas-draw',
     'modules/interface',
@@ -16,7 +18,9 @@ define([
     'modules/particle.physicsjs',
     'modules/strong-nuclear.physicsjs'
 ], function(
+    require,
     $,
+    _$vp,
     TWEEN,
     Draw,
     Interface,
@@ -272,6 +276,15 @@ define([
         Physics.util.ticker.start();
 
         ui.emit('restart');
+
+        // pause if you can't see it
+        $(window).on('scroll', function(){
+            if ( el.is(':in-viewport') ){
+                world.unpause();
+            } else {
+                world.pause();
+            }
+        });
     }
 
     function sunSimulation( world ) {
@@ -287,6 +300,36 @@ define([
         });
 
         simulation( world, ui, el, field );
+
+        // create the arrows
+        var arrows = $((new Array(9)).join('<img>'))
+            .attr('src', require.toUrl('../../images/arrow-down.png'))
+            .attr('width', '80')
+            .css({ 'margin-left': '-20px', 'margin-top': '-50px', 'zIndex': 5 })
+            .appendTo(el)
+            ;
+
+        var center = Physics.vector(el.width()/2 - 12, el.height()/2 - 26);
+
+        function placement( r ){
+            var v = Physics.vector(0, -r);
+            arrows.each(function( i ){
+                $(this).css({
+                    position: 'absolute'
+                    ,top: 0// v.y + center.y
+                    ,left: 0//center.x + v.x
+                });
+                this.style[Modernizr.prefixed('transform')] = 'translate('+[v.x+center.x, v.y+center.y].join('px,')+'px) rotate('+(45 * i)+'deg)';
+                v.rotate( Math.PI/4 );
+
+            });
+        }
+
+        ui.on('change:field', function( e, val ){
+            placement( lerp(200, 150, val) );
+        });
+
+        placement( lerp(200, 150, ui.settings.field) );
     }
 
     function bottleSimulation( world ) {
@@ -306,5 +349,5 @@ define([
 
     // wait for domready, then initialize
     Physics({ timestep: 6 }, [ domready, sunSimulation ]);
-    Physics({ timestep: 0.2 }, [ domready, bottleSimulation ]);
+    Physics({ timestep: 0.1 }, [ domready, bottleSimulation ]);
 });
