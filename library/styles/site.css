@@ -359,3 +359,69 @@ html, body, #wrap-outer {
   background: url('../images/curvy-arrow.png?1401842778') no-repeat right center;
   background-size: 34px;
 }
+
+/* line 296, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info {
+  position: relative;
+}
+/* line 299, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info .legend {
+  margin: 34px 22px;
+}
+/* line 301, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info .legend h3 {
+  font-family: 'PHD';
+  color: #000;
+  font-size: 30px;
+  font-weight: normal;
+  margin: 0;
+}
+/* line 308, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info .legend dl {
+  overflow: hidden;
+  margin: 0;
+}
+/* line 312, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info .legend dt {
+  float: left;
+  height: 22px;
+  width: 22px;
+  clear: left;
+  text-align: center;
+}
+/* line 319, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info .legend dd {
+  float: left;
+  height: 22px;
+  line-height: 120%;
+  margin-left: 4px;
+}
+/* line 329, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info .credit {
+  position: absolute;
+  right: 20px;
+  top: 54px;
+}
+/* line 335, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info .minutelabs {
+  font-size: 18px;
+  font-family: "latin-modern-mono", Courier, monospace;
+  text-decoration: none;
+  color: #1a1a1a;
+  display: inline-block;
+  float: right;
+  margin-top: -85px;
+  margin-left: 1em;
+  text-align: center;
+  -webkit-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
+}
+/* line 349, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info .minutelabs span {
+  color: #626262;
+}
+/* line 353, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#bottom-info .minutelabs img {
+  display: block;
+  margin: 0 auto 0.4em;
+}

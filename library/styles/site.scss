@@ -292,3 +292,67 @@ html, body, #wrap-outer {
         background-size: 34px;
     }
 }
+
+#bottom-info {
+    position: relative;
+
+    .legend {
+        margin: 34px 22px;
+        h3 {
+            font-family: 'PHD';
+            color: #000;
+            font-size: 30px;
+            font-weight: normal;
+            margin: 0;
+        }
+        dl {
+            overflow: hidden;
+            margin: 0;
+        }
+        dt {
+            float: left;
+            height: 22px;
+            width: 22px;
+            clear: left;
+            text-align: center;
+        }
+        dd {
+            float: left;
+            height: 22px;
+            line-height: 120%;
+            margin-left: 4px;
+        }
+
+
+    }
+
+    .credit {
+        position: absolute;
+        right: 20px;
+        top: 54px;
+    }
+
+    .minutelabs {
+        font-size: 18px;
+        font-family: $font-family-minute-labs;
+        text-decoration: none;
+        color: $deep-grey-dark;
+        display: inline-block;
+        float: right;
+        margin-top: -85px;
+        margin-left: 1em;
+        text-align: center;
+
+        -webkit-font-smoothing: auto;
+        text-rendering: optimizeLegibility;
+
+        span {
+            color: $deep-grey-light;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto 0.4em;
+        }
+    }
+}
