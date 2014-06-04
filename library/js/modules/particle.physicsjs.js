@@ -9,9 +9,9 @@ define([
     'use strict';
 
     var images = {
-        hydrogen: require.toUrl('../../images/hydrogen.png')
-        ,helium: require.toUrl('../../images/helium.png')
-        ,neutron: require.toUrl('../../images/neutron.png')
+        proton: require.toUrl('../../images/particle-blue.png')
+        ,neutron: require.toUrl('../../images/particle-purple.png')
+        ,positron: require.toUrl('../../images/particle-yellow.png')
     };
 
     Physics.body('particle', 'circle', function( parent ){
@@ -38,30 +38,33 @@ define([
                 return this._ptype;
             }
             ,set ptype( t ){
+                if ( !this.geometry ){
+                    return;
+                }
                 if ( t === 'neutron' ){
                     this._ptype = 'neutron';
                     this.charge = 0;
                     // this.styles.fillStyle = '#373f9b';
-                    this.geometry.radius -= 2;
                     this.styles.src = images.neutron;
-                    this.styles.width = this.geometry.radius*2;
-                    this.styles.height = this.geometry.radius*2;
+                    this.styles.width = this.geometry.radius*2 + 1;
+                    this.styles.height = this.geometry.radius*2 + 1;
 
-                } else if ( t === 'helium' ) {
-                    this._ptype = 'helium';
-                    this.charge = 2;
-                    // this.styles.fillStyle = '#942828';
-                    this.geometry.radius += 4;
-                    this.styles.src = images.helium;
-                    this.styles.width = this.geometry.radius*2;
-                    this.styles.height = this.geometry.radius*2;
+                } else if ( t === 'positron' ){
+                    this._ptype = 'positron';
+                    this.charge = 1;
+                    this.geometry.radius = 5;
+                    this.styles.src = images.positron;
+                    this.styles.width = this.geometry.radius*2 + 1;
+                    this.styles.height = this.geometry.radius*2 + 1;
+
                 } else {
                     this._ptype = 'proton';
                     this.charge = 1;
                     // this.styles.fillStyle = '#942828';
-                    this.styles.src = images.hydrogen;
-                    this.styles.width = this.geometry.radius*2;
-                    this.styles.height = this.geometry.radius*2;
+                    this.styles.src = images.proton;
+                    this.styles.width = this.geometry.radius*2 + 1;
+                    this.styles.height = this.geometry.radius*2 + 1;
+
                 }
                 // force renderer to recreate the view
                 this.view = false;

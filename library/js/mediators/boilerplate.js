@@ -14,8 +14,7 @@ define([
     'modules/magnetic.physicsjs',
     'modules/coulomb.physicsjs',
     'modules/particle.physicsjs',
-    'modules/strong-nuclear.physicsjs',
-    'modules/fusion-monitor'
+    'modules/strong-nuclear.physicsjs'
 ], function(
     $,
     TWEEN,
@@ -99,30 +98,27 @@ define([
         return lerp(0, 5e-7, v);
     }
 
-    function simulation( world ) {
+    function sunSimulation( world ) {
 
-        var ui = Interface( world )
+        var el = $('#sun-simulation')
+            ,ui = Interface({ el: el.find('.controls:first'), width: 400, height: 400 })
             ,viewWidth = ui.width
             ,viewHeight = ui.height
+            ,renderer
             // bounds of the window
             ,viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight)
             ,center = Physics.vector(viewWidth/2, viewHeight/2)
-            ,attractor = Physics.behavior('attractor', { pos: center, min: viewWidth/2, strength: 1e-8, order: -2 })
-            ,renderer
-            ,coulomb = Physics.behavior('coulomb', { strength: 7 })
+            ,coulomb = Physics.behavior('coulomb', { strength: 10, min: 5 })
             ,Bfield = Physics.behavior('magnetic', { strength: BFieldStrength(ui.settings.field) })
-            ,Gfield = Physics.behavior('attractor', { pos: center, min: 30, strength: GFieldStrength(ui.settings.field), order: 2 })
-            ,R2field = Physics.behavior('attractor', { pos: center, min: 50, strength: R2FieldStrength(ui.settings.field), order: -2 })
+            ,R2field = Physics.behavior('attractor', { pos: center, min: 80, strength: R2FieldStrength(ui.settings.field), order: -2 })
             ;
 
         // create a renderer
         renderer = Physics.renderer('canvas', {
-            el: 'physics'
+            el: el.find('canvas:first')[0]
             ,width: viewWidth
             ,height: viewHeight
         });
-
-        renderer.addLayer('bg', false, { zIndex: 0 }).render = function(){};
 
         // add the renderer
         world.add(renderer);
@@ -158,7 +154,7 @@ define([
             viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight);
 
             center.set(viewWidth, viewHeight).mult(0.5);
-            R2field.options({pos:center});
+            R2field.options({ pos:center });
         });
 
         var collisions = 0;
@@ -197,7 +193,7 @@ define([
                             ,vx: v.x
                             ,vy: v.y
                             ,mass: 1
-                            ,radius: 10
+                            ,radius: 8
                         }));
                     } else {
                         tries--;
@@ -205,80 +201,30 @@ define([
                 }
 
                 world.add(particles);
+                R2field.applyTo(particles);
                 ui.emit('collision-counter', collisions);
             }
             ,'change:field': function( e, val ){
-                Bfield.options.strength = BFieldStrength( val );
-                Gfield.options.strength = GFieldStrength( val );
-                R2field.options.strength = R2FieldStrength( val );
 
-                // if ( ui.settings.fieldType === 'gravity' ){
-                //     // radial gradient
-                //     Draw( renderer.layer('bg').ctx );
-                //     var grd = Draw.ctx.createRadialGradient(center.x, center.y, lerp( 200, 40, ui.settings.field ), center.x, center.y, viewWidth*0.9);
-                //     grd.addColorStop(0, 'white');
-                //     grd.addColorStop(1, colors.blueBottle);
-                //     Draw
-                //         .styles('fillStyle', grd)
-                //         .rect(0, 0, viewWidth, viewHeight)
-                //         .fill()
-                //         ;
-                // } else if ( ui.settings.fieldType === 'r2' ){
-                //     // radial gradient
-                //     Draw( renderer.layer('bg').ctx );
-                //     var grd = Draw.ctx.createRadialGradient(center.x, center.y, lerp( 200, 40, ui.settings.field ), center.x, center.y, viewWidth*0.9);
-                //     grd.addColorStop(0, colors.blueBottle);
-                //     grd.addColorStop(1, 'white');
-                //     Draw
-                //         .styles('fillStyle', grd)
-                //         .rect(0, 0, viewWidth, viewHeight)
-                //         .fill()
-                //         ;
-                // } else {
-                //     Draw( renderer.layer('bg').ctx )
-                //         .clear()
-                //         .styles('fillStyle', adjustAlpha( colors.blueBottle, lerp( 0, .8, val ) ))
-                //         .rect(0, 0, viewWidth, viewHeight)
-                //         .fill()
-                //         ;
-                // }
-            }
-            ,'change:energy': function( e, val ){
-                // var scale = Math.sqrt(val/lastE);
-                // lastE = val;
-                // for ( var i = 0, l = particles.length; i < l; i++ ){
-                //     particles[ i ].state.vel.mult( scale );
-                // }
-            }
-            ,'change:simulation': function( e, val ){
-                ui.width = val === 'sun' ? 360 : 600;
-                ui.emit('resize');
-                $('#sim-wrap').removeClass('bottle sun').addClass( val );
-
-                if ( val === 'sun' ){
-                    world.remove( Bfield ).add( R2field );
-                } else {
-                    world.remove( R2field ).add( Bfield );
-                }
-
-                ui.emit('restart');
+                R2field.options.strength = R2FieldStrength(val);
             }
         });
 
-        ui.emit('change:simulation', ui.settings.simulation);
-
-        var bangWords = ["BAM!", "THWAP!", "BANG!"];
         world.on('fusion', function( entity ){
+
+            // give the fused particle energy
+            entity.members[0].state.vel.mult( 40 );
+
             // create a little explosion animation
             var pos = Physics.vector().clone( entity.members[0].state.pos )
-                ,text = bangWords[Math.random()*3|0] //entity.name
+                ,text = entity.name
                 ,s = {
                     lineWidth: 3
-                    ,strokeStyle: 'rgba(217, 199, 3, 1)'
+                    ,strokeStyle: 'rgba(219, 135, 1, 0.98)'
                     ,shadowBlur: 10
                 }
                 ,textStyles = {
-                    font: '30px "sf_cartoonist_hand", Helvetica, Arial, sans-serif' // '30px "latin-modern-mono-light", Courier, monospace'
+                    font: '30px "PHD", "sf_cartoonist_hand", Helvetica, Arial, sans-serif' // '30px "latin-modern-mono-light", Courier, monospace'
                     ,fillStyle: adjustAlpha(colors.phdred, 1)
                 }
                 ,ctx = renderer.layer('main').ctx
@@ -312,17 +258,12 @@ define([
 
         // add things to the world
         world.add([
-            Physics.behavior('fusion-monitor')
-            ,Physics.behavior('sweep-prune')
+            Physics.behavior('sweep-prune')
             ,Physics.behavior('body-impulse-response')
             ,Physics.behavior('body-collision-detection')
-            // ,Physics.behavior('strong-nuclear')
-            // ,attractor
+            ,Physics.behavior('strong-nuclear')
+            ,R2field
             ,coulomb
-            // ,Bfield
-            // ,Gfield
-            //,Physics.behavior('interactive', { el: renderer.el })
-
         ]);
 
         // subscribe to ticker to advance the simulation
@@ -333,8 +274,10 @@ define([
 
         // start the ticker
         Physics.util.ticker.start();
+
+        ui.emit('restart');
     }
 
     // wait for domready, then initialize
-    Physics({ timestep: 0.2 }, [ domready, simulation ]);
+    Physics({ timestep: 0.2 }, [ domready, sunSimulation ]);
 });

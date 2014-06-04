@@ -3,6 +3,10 @@
 @import '_vars';
 @import '_slider';
 
+@include font-face('PHD', font-files('webfontkit-PHD/jorge_v03-webfont.ttf', 'webfontkit-PHD/jorge_v03-webfont.svg#PHDregular'), 'webfontkit-PHD/jorge_v03-webfont.eot', normal, normal);
+@include font-face('PHD', inline-font-files('webfontkit-PHD/jorge_v03-webfont.woff', woff), $weight: normal, $style: normal);
+
+
 html, body, #wrap-outer {
     height: 100%;
 }
@@ -39,153 +43,144 @@ html, body, #wrap-outer {
 }
 
 #viewport {
+    color: #000;
+    line-height: 0.666666;
+    font-family: 'PHD';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-size: 20px;
     width: 600px;
     margin: auto;
+    padding: 5px;
+    border: 7px solid black;
 }
 
-#sun-bg {
-    display: none;
-}
+#intro-cta {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    font-size: 27px;
+    width: 460px;
+    margin: auto;
+    p {
+        margin: 1em 0 0.8em;
+    }
 
-#arturo-sun-image,
-#jorge-sun-image {
-    display: none;
+    .column {
+        position: relative;
+    }
+
+    .column:after {
+        position: absolute;
+        top: 5px;
+        left: -48px;
+        content: '';
+        background: image-url('curvy-arrow-up.png') no-repeat center center;
+        background-size: 100%;
+        width: 40px;
+        height: 50px;
+    }
+
+    .last:after {
+        top: 40px;
+        left: auto;
+        right: -34px;
+        background: image-url('curvy-arrow-down.png') no-repeat center center;
+        background-size: 100%;
+    }
 }
 
 #sim-wrap {
-    h3 {
-        text-align: center;
-        font-family: $font-family-comic;
-        font-weight: normal;
-        letter-spacing: 1px;
-        font-size: 28px;
-        margin: 1em 0;
-    }
-}
+    clear: both;
 
-#sim-wrap.sun {
-    #simulation {
+    .simulation {
         position: relative;
-        height: 460px;
+        width: 600px;
+        height: 620px;
     }
-    #physics {
-        top: 110px;
+
+    .controls {
+        position: absolute;
+        bottom: 0px;
+        right: 5px;
+        z-index: 2;
+        width: 180px;
+    }
+
+    .view {
+        position: absolute;
+        top: 78px;
         left: 50%;
-        margin-left: -180px;
+        z-index: 1;
+        width: 400px;
+        height: 400px;
+        overflow: hidden;
+        margin-left: -194px;
         @include border-radius( 50% );
     }
-    #sun-bg {
-        display: block;
+}
+
+#sun-simulation {
+    background: image-url('bg-sun.png') no-repeat center center;
+    background-size: 100%;
+
+    .help {
         position: absolute;
-        top: 0;
-        left: 50%;
-        margin-left: -280px;
-        width: 560px;
-        z-index: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding: 20px 30px;
     }
-    #us-image {
-        display: none;
-    }
-    #arturo-sun-image,
-    #jorge-sun-image {
-        display: block;
-        width: 100px;
-        float: left;
-    }
-    #arturo-sun-image {
-        padding-top: 20px;
+
+    &:after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 15px;
+        z-index: 1;
+        background: image-url('fg-jorge-arturo.png') no-repeat center center;
+        background-size: 100%;
+        width: 185px;
+        height: 185px;
     }
 }
 
-#sim-wrap.bottle {
-    #physics {
-        background: rgb(157, 188, 227);
-    }
-}
-
-#simulation {
-    height: 300px;
-}
-
-#sim-selector {
-    overflow: hidden;
+.phdbtn {
+    display: inline-block;
+    padding: 0.6em 0.8em 0.3em;
+    // border: 1px solid darken(#00bff3, 15);
+    background: #000;
+    color: #fff;
     text-align: center;
-    > * {
-        cursor: pointer;
-        margin: 0 2em;
-        display: inline-block;
-    }
-}
+    text-decoration: none;
 
-#bottle-image,
-#bottle-image-bw {
-    border: 1px solid rgba(255,255,255,0);
-    padding: 17px 16px 17px 14px;
-    width: 160px;
-    // @include background(radial-gradient(rgb(241, 158, 51), #fff 70%));
-}
-#sun-image,
-#sun-image-bw {
-    border: 1px solid rgba(255,255,255,0);
-    width: 160px;
-}
-
-#sun-image-bw:hover,
-#bottle-image-bw:hover {
-    border: 1px solid $blue;
     @include border-radius( 3px );
-}
 
-#sim-wrap.bottle {
-    #bottle-image-bw,
-    #sun-image {
-        display: none;
-    }
-    #sun-image-bw,
-    #bottle-image {
-        display: inline-block;
+    &:hover {
+        color: #fff;
+        background: darken(#00bff3, 10);
     }
 
-    #bottle-image {
-        border: 1px solid $blue;
-        @include border-radius( 3px );
+    &:active {
+        background: #000;
     }
 }
 
-#sim-wrap.sun {
-    #bottle-image-bw,
-    #sun-image {
-        display: inline-block;
-    }
-    #sun-image-bw,
-    #bottle-image {
-        display: none;
-    }
-    #sun-image {
-        border: 1px solid $blue;
-        @include border-radius( 3px );
-    }
-}
+.controls {
+    color: #000;
+    text-align: right;
+    font-size: 20px;
+    line-height: 0.666666;
+    font-family: 'PHD';
 
-#us-image {
-    float: left;
-    width: 200px;
-}
-
-#controls {
-    overflow:hidden;
-    font-size: 1.5em;
-    letter-spacing: 1px;
-    font-family: $font-family-comic;
-    padding: 2em 0 2em;
-
-    .sun & {
-        padding-top: 2em;
+    label {
+        padding-right: 1em;
     }
 
-    button {
-        font-family: $font-family-comic;
-        font-size: 0.8em;
+    .phdbtn {
+        font-family: 'PHD';
+        margin-bottom: 1em;
+        margin-right: 1em;
     }
 
     .slider {
@@ -220,13 +215,19 @@ html, body, #wrap-outer {
             }
         }
     }
-}
 
-#simulation {
-    margin-top: 1em;
-}
-
-#simulation canvas {
-    // border: 1px solid black;
-    @include border-radius( 3px );
+    &:before {
+        content: 'Play with the knobs, see what happens!';
+        width: 150px;
+        position: absolute;
+        bottom: 30px;
+        left: -220px;
+        font-size: 22px;
+        line-height: .67;
+        text-align: center;
+        padding-right: 40px;
+        padding-bottom: 10px;
+        background: image-url('curvy-arrow.png') no-repeat right center;
+        background-size: 34px;
+    }
 }
