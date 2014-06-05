@@ -217,8 +217,7 @@ a.phdbtn {
 
     @include border-radius( 3px );
 
-    &:hover,
-    &:visited {
+    &:hover {
         color: #fff;
         background: darken(#00bff3, 10);
     }
@@ -254,10 +253,12 @@ a.phdbtn {
         }
     }
 
-    .ctrl-reset {
+    a.ctrl-reset {
+        color: #853b3b;
         margin-right: 1em;
-        margin-bottom: 0.4em;
+        margin-bottom: 0.7em;
         text-decoration: none;
+        display: block;
     }
 
     .col-counter {
@@ -342,6 +343,7 @@ a.phdbtn {
         position: absolute;
         right: 20px;
         top: 32px;
+        text-align: center;
 
         a {
             text-decoration: none;
