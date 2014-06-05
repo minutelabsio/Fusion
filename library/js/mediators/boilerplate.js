@@ -302,13 +302,13 @@ define([
         ui.emit('restart');
 
         // pause if you can't see it
-        $(window).on('scroll', function(){
-            if ( el.is(':in-viewport') ){
-                world.unpause();
-            } else {
-                world.pause();
-            }
-        });
+        // setInterval(function(){
+        //     if ( el.is(':in-viewport') ){
+        //         world.unpause();
+        //     } else {
+        //         world.pause();
+        //     }
+        // }, 1000);
     }
 
     function sunSimulation( world ) {
