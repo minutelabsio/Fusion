@@ -66,6 +66,33 @@ define([
 
     };
 
+    function throttle( fn, delay, scope ){
+        var to
+            ,call = false
+            ,args
+            ,cb = function(){
+                clearTimeout( to );
+                if ( call ){
+                    call = false;
+                    to = setTimeout(cb, delay);
+                    fn.apply(scope, args);
+                } else {
+                    to = false;
+                }
+            }
+            ;
+
+        scope = scope || null;
+
+        return function(){
+            call = true;
+            args = arguments;
+            if ( !to ){
+                cb();
+            }
+        };
+    }
+
     function adjustAlpha( color, alpha ){
         color = color.split(/[\(,\)]/);
         color.pop();
@@ -255,6 +282,9 @@ define([
                 world.add(particles);
                 field.applyTo(particles);
             }
+            ,'change:density': throttle(function(){
+                ui.emit('restart');
+            }, 1000)
         });
 
         world.on('fusion', fusionEvent, world);
@@ -361,6 +391,26 @@ define([
         });
 
         magnets.css('opacity', ui.settings.field);
+
+        var center = Physics.vector(ui.width/2, ui.height/2);
+        world.on('integrate:positions', function(){
+            var body
+                ,scratch = Physics.scratchpad()
+                ,r = scratch.vector()
+                ,a
+                ;
+            for ( var i = 0, l = world._bodies.length; i < l; i++ ){
+                body = world._bodies[ i ];
+                if ( body.ptype === 'proton' || body.ptype === 'neutron' ){
+                    r.clone( body.state.pos ).vsub( center );
+                    a = body.state.vel.normSq() / r.norm();
+                    r.normalize().mult( a );
+                    body.accelerate( r );
+                }
+            }
+
+            scratch.done();
+        });
     }
 
     // wait for domready, then initialize
