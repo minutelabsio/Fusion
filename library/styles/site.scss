@@ -51,8 +51,8 @@ html, body, #wrap-outer {
     font-size: 20px;
     width: 600px;
     margin: auto;
-    padding: 5px;
-    border: 7px solid black;
+    // padding: 5px;
+    // border: 7px solid black;
 }
 
 #intro-cta {
@@ -177,6 +177,10 @@ html, body, #wrap-outer {
         width: 450px;
         height: 450px;
         margin-left: -227px;
+
+        canvas {
+            @include border-radius( 50% );
+        }
     }
 
     .slider .handle {
@@ -339,7 +343,11 @@ html, body, #wrap-outer {
     .credit {
         position: absolute;
         right: 20px;
-        top: 54px;
+        top: 32px;
+
+        a {
+            text-decoration: none;
+        }
     }
 
     .minutelabs {
@@ -349,7 +357,7 @@ html, body, #wrap-outer {
         color: $deep-grey-dark;
         display: inline-block;
         float: right;
-        margin-top: -85px;
+        margin-top: -50px;
         margin-left: 1em;
         text-align: center;
 
