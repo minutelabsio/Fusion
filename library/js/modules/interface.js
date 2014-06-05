@@ -61,30 +61,24 @@ define([
                 });
             });
 
-            this.$el.hammer().on('touch', '#ctrl-add', function( e ){
-                e.preventDefault();
-                self.emit('add');
-            }).on('touch', '#ctrl-restart', function( e ){
+            this.defaults = $.extend({}, this.settings);
+
+            this.$el.hammer().on('touch', '.ctrl-restart', function( e ){
                 e.preventDefault();
                 self.emit('restart');
-            });
-
-            $('.phdbtn').on('click', function( e ){
+            }).on('touch', '.ctrl-reset', function( e ){
                 e.preventDefault();
+
+                self.$el.find('.slider').slider().each(function(){
+                    var name = $(this).attr('data-name');
+                    self.settings[ name ] = self.defaults[ name ];
+                    $(this).trigger('refresh', self.defaults[ name ]);
+                });
+                self.emit('reset');
             });
 
-            this.on('collision-counter', function( e, val ){
-
-                self.$el.find('.col-counter data')
-                    .html( val|0 )
-                    .stop()
-                    .css({
-                        'color': 'rgb(236, 29, 29)'
-                    })
-                    .animate({
-                        'color': 'rgb(67, 67, 67)'
-                    }, 2000)
-                    ;
+            this.$el.find('.phdbtn, a').on('click', function( e ){
+                e.preventDefault();
             });
 
         }

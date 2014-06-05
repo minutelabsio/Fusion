@@ -209,6 +209,9 @@ define([
                 }
                 lastE = val;
             }
+            ,'reset': function(){
+                ui.emit('restart');
+            }
             ,'restart': function(){
                 lastE = ui.settings.energy;
                 // remove all particles
@@ -290,7 +293,7 @@ define([
     function sunSimulation( world ) {
 
         var el = $('#sun-simulation')
-            ,ui = Interface({ el: el.find('.controls:first'), width: 600, height: 600 })
+            ,ui = Interface({ el: el.find('.controls:first'), width: 400, height: 400 })
             ,field = Physics.behavior('attractor', { pos: Physics.vector(ui.width/2, ui.width/2), min: 80, strength: R2FieldStrength(ui.settings.field), order: -2 })
             ;
 

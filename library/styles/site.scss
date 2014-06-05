@@ -51,8 +51,8 @@ html, body, #wrap-outer {
     font-size: 20px;
     width: 600px;
     margin: auto;
-    padding: 5px;
-    border: 7px solid black;
+    // padding: 5px;
+    // border: 7px solid black;
 }
 
 #intro-cta {
@@ -136,15 +136,6 @@ html, body, #wrap-outer {
         @include text-shadow(0 0 7px white);
     }
 
-    .view {
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        @include border-radius(0);
-    }
-
     &:after {
         content: '';
         position: absolute;
@@ -177,6 +168,10 @@ html, body, #wrap-outer {
         width: 450px;
         height: 450px;
         margin-left: -227px;
+
+        canvas {
+            @include border-radius( 50% );
+        }
     }
 
     .slider .handle {
@@ -211,7 +206,7 @@ html, body, #wrap-outer {
     text-align: center;
 }
 
-.phdbtn {
+a.phdbtn {
     display: inline-block;
     padding: 0.6em 0.8em 0.3em;
     // border: 1px solid darken(#00bff3, 15);
@@ -222,7 +217,8 @@ html, body, #wrap-outer {
 
     @include border-radius( 3px );
 
-    &:hover {
+    &:hover,
+    &:visited {
         color: #fff;
         background: darken(#00bff3, 10);
     }
@@ -256,6 +252,12 @@ html, body, #wrap-outer {
         .handle {
             -webkit-transform: translateZ(0);
         }
+    }
+
+    .ctrl-reset {
+        margin-right: 1em;
+        margin-bottom: 0.4em;
+        text-decoration: none;
     }
 
     .col-counter {
@@ -339,7 +341,11 @@ html, body, #wrap-outer {
     .credit {
         position: absolute;
         right: 20px;
-        top: 54px;
+        top: 32px;
+
+        a {
+            text-decoration: none;
+        }
     }
 
     .minutelabs {
@@ -349,7 +355,7 @@ html, body, #wrap-outer {
         color: $deep-grey-dark;
         display: inline-block;
         float: right;
-        margin-top: -85px;
+        margin-top: -50px;
         margin-left: 1em;
         text-align: center;
 
