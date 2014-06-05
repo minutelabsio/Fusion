@@ -152,7 +152,7 @@ define([
             // bounds of the window
             ,viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight)
             ,center = Physics.vector(viewWidth/2, viewHeight/2)
-            ,coulomb = Physics.behavior('coulomb', { strength: 2/world.timestep(), min: 5 })
+            ,coulomb = Physics.behavior('coulomb', { strength: 3/world.timestep(), min: 5 })
             ;
 
         // create a renderer
@@ -223,11 +223,11 @@ define([
                 var T = ui.settings.energy/world.timestep();
                 var particles = [];
                 var tries = 100;
-                while( l < 20 && tries > 0 ){
+                while( l < 60 && tries > 0 ){
                     add = true;
                     pos.set(viewWidth * Math.random(), viewHeight  * Math.random());
                     for ( var i = 0, l = particles.length; i < l; i++ ){
-                        if ( particles[i].state.pos.dist(pos) <= lerp(200, 25, density) ){
+                        if ( particles[i].state.pos.dist(pos) <= lerp(200, 15, density) ){
                             add = false;
                             break;
                         }
@@ -290,7 +290,7 @@ define([
     function sunSimulation( world ) {
 
         var el = $('#sun-simulation')
-            ,ui = Interface({ el: el.find('.controls:first'), width: 400, height: 400 })
+            ,ui = Interface({ el: el.find('.controls:first'), width: 600, height: 600 })
             ,field = Physics.behavior('attractor', { pos: Physics.vector(ui.width/2, ui.width/2), min: 80, strength: R2FieldStrength(ui.settings.field), order: -2 })
             ;
 
@@ -345,6 +345,19 @@ define([
         });
 
         simulation( world, ui, el, field );
+
+        var magnets = $('<img>')
+            .attr('src', require.toUrl('../../images/bg-magnets.png'))
+            .attr('width', '550')
+            .css({ 'position': 'absolute', 'top': 112, 'left': 25, 'zIndex': 5 })
+            .appendTo(el)
+            ;
+
+        ui.on('change:field', function( e, val ){
+            magnets.css('opacity', val);
+        });
+
+        magnets.css('opacity', ui.settings.field);
     }
 
     // wait for domready, then initialize

@@ -132,8 +132,17 @@ html, body, #wrap-outer {
         right: 0;
         text-align: center;
         padding: 20px 30px;
-        z-index: 3;
+        z-index: 6;
         @include text-shadow(0 0 7px white);
+    }
+
+    .view {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        @include border-radius(0);
     }
 
     &:after {
@@ -141,7 +150,7 @@ html, body, #wrap-outer {
         position: absolute;
         bottom: -10px;
         left: 15px;
-        z-index: 1;
+        z-index: 6;
         background: image-url('fg-jorge-arturo.png') no-repeat center center;
         background-size: 100%;
         width: 185px;
@@ -180,7 +189,7 @@ html, body, #wrap-outer {
         position: absolute;
         bottom: -20px;
         left: 15px;
-        z-index: 1;
+        z-index: 6;
         background: image-url('fg-jorge-stefan.png') no-repeat center center;
         background-size: 100%;
         width: 230px;
@@ -232,6 +241,7 @@ html, body, #wrap-outer {
 
     label {
         padding-right: 1em;
+        @include text-shadow(0 0 7px white);
     }
 
     .phdbtn {

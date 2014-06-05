@@ -190,29 +190,42 @@ html, body, #wrap-outer {
   right: 0;
   text-align: center;
   padding: 20px 30px;
-  z-index: 3;
+  z-index: 6;
   text-shadow: 0 0 7px white;
 }
 /* line 139, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+#sun-simulation .view {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+/* line 148, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #sun-simulation:after {
   content: '';
   position: absolute;
   bottom: -10px;
   left: 15px;
-  z-index: 1;
+  z-index: 6;
   background: url('../images/fg-jorge-arturo.png?1401842778') no-repeat center center;
   background-size: 100%;
   width: 185px;
   height: 185px;
 }
 
-/* line 152, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 161, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottle-simulation {
-  background: url('../images/bg-bottle.png?1401842778') no-repeat center center;
+  background: url('../images/bg-bottle.png?1401939898') no-repeat center center;
   background-size: 100%;
   height: 690px;
 }
-/* line 157, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 166, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottle-simulation .help {
   position: absolute;
   left: 0;
@@ -221,47 +234,47 @@ html, body, #wrap-outer {
   width: 300px;
   margin: 38px auto;
 }
-/* line 166, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 175, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottle-simulation .view {
   top: 115px;
   width: 450px;
   height: 450px;
   margin-left: -227px;
 }
-/* line 173, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 182, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottle-simulation .slider .handle {
   border-color: #3b8585;
   background: #3b8585;
 }
-/* line 178, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 187, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottle-simulation:after {
   content: '';
   position: absolute;
   bottom: -20px;
   left: 15px;
-  z-index: 1;
+  z-index: 6;
   background: url('../images/fg-jorge-stefan.png?1401842778') no-repeat center center;
   background-size: 100%;
   width: 230px;
   height: 250px;
 }
-/* line 190, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 199, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottle-simulation .phdbtn:hover {
   background: #d35a0a;
 }
-/* line 194, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 203, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottle-simulation .phdbtn:active {
   background: #000;
 }
 
-/* line 199, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 208, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #mid-help {
   width: 400px;
   margin: 1em auto 0.8em;
   text-align: center;
 }
 
-/* line 205, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 214, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .phdbtn {
   display: inline-block;
   padding: 0.6em 0.8em 0.3em;
@@ -275,17 +288,17 @@ html, body, #wrap-outer {
   -o-border-radius: 3px;
   border-radius: 3px;
 }
-/* line 216, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 225, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .phdbtn:hover {
   color: #fff;
   background: #0097c0;
 }
-/* line 221, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 230, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .phdbtn:active {
   background: #000;
 }
 
-/* line 226, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 235, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls {
   color: #000;
   text-align: right;
@@ -293,58 +306,59 @@ html, body, #wrap-outer {
   line-height: 0.666666;
   font-family: 'PHD';
 }
-/* line 233, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 242, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls label {
   padding-right: 1em;
+  text-shadow: 0 0 7px white;
 }
-/* line 237, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 247, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .phdbtn {
   font-family: 'PHD';
   margin-bottom: 1em;
   margin-right: 1em;
 }
-/* line 243, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 253, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .slider {
   margin-bottom: 1em;
 }
-/* line 246, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 256, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .slider .handle {
   -webkit-transform: translateZ(0);
 }
-/* line 251, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 261, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .col-counter {
   margin: 0 0 1em 0.6em;
   text-align: left;
 }
-/* line 254, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 264, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .col-counter data {
   font-size: 2em;
   vertical-align: middle;
   margin-left: 0.2em;
   margin-top: -0.2em;
 }
-/* line 262, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 272, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .column {
   text-align: center;
 }
-/* line 266, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 276, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .field-type {
   overflow: hidden;
   margin-bottom: 2em;
 }
-/* line 269, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 279, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .field-type .radio-group {
   margin-left: 1em;
 }
-/* line 271, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 281, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .field-type .radio-group > a {
   margin-right: 48px;
 }
-/* line 273, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 283, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls .field-type .radio-group > a:last-child {
   margin-right: 0;
 }
-/* line 280, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 290, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 .controls:before {
   content: 'Play with the knobs, see what happens!';
   width: 150px;
@@ -360,15 +374,15 @@ html, body, #wrap-outer {
   background-size: 34px;
 }
 
-/* line 296, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 306, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info {
   position: relative;
 }
-/* line 299, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 309, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info .legend {
   margin: 34px 22px;
 }
-/* line 301, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 311, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info .legend h3 {
   font-family: 'PHD';
   color: #000;
@@ -376,12 +390,12 @@ html, body, #wrap-outer {
   font-weight: normal;
   margin: 0;
 }
-/* line 308, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 318, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info .legend dl {
   overflow: hidden;
   margin: 0;
 }
-/* line 312, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 322, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info .legend dt {
   float: left;
   height: 22px;
@@ -389,20 +403,20 @@ html, body, #wrap-outer {
   clear: left;
   text-align: center;
 }
-/* line 319, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 329, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info .legend dd {
   float: left;
   height: 22px;
   line-height: 120%;
   margin-left: 4px;
 }
-/* line 329, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 339, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info .credit {
   position: absolute;
   right: 20px;
   top: 54px;
 }
-/* line 335, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 345, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info .minutelabs {
   font-size: 18px;
   font-family: "latin-modern-mono", Courier, monospace;
@@ -416,11 +430,11 @@ html, body, #wrap-outer {
   -webkit-font-smoothing: auto;
   text-rendering: optimizeLegibility;
 }
-/* line 349, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 359, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info .minutelabs span {
   color: #626262;
 }
-/* line 353, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
+/* line 363, /Users/wellcaffeinated/Documents/github/minutelabs/Fusion/library/styles/site.scss */
 #bottom-info .minutelabs img {
   display: block;
   margin: 0 auto 0.4em;
