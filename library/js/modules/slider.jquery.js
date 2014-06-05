@@ -27,10 +27,7 @@ define(['jquery'], function( $ ){
     }
 
     $.fn.slider = function( opts ){
-        var startevent = window.Modernizr.touch ? 'touchstart' : 'mousedown';
-        var moveevent = window.Modernizr.touch ? 'touchmove' : 'mousemove';
-        var endevent = window.Modernizr.touch ? 'touchend' : 'mouseup';
-
+        
         return $(this).each(function(){
             var $this = $(this).addClass('slider')
                 ,options = $.extend({
@@ -101,16 +98,27 @@ define(['jquery'], function( $ ){
 
             function end(){
                 dragging = false;
-                $(document).off(moveevent, drag);
+                $(document).off('touchend', drag);
+                $(document).off('mouseup', drag);
             }
 
-            $this.on(startevent, function( e ){
+            $this.on('mousedown', function( e ){
                 dragging = true;
                 drag( e );
 
-                $(document).on(moveevent, drag);
+                $(document).on('mousemove', drag);
             });
-            $(document).on(endevent, end);
+            $(document).on('mouseup', end);
+
+            if ( Modernizr.touch ){
+                $this.on('touchstart', function( e ){
+                    dragging = true;
+                    drag( e );
+
+                    $(document).on('touchmove', drag);
+                });
+                $(document).on('touchend', end);
+            }
 
             $this.on('mousedown', function(){
                 return false;
