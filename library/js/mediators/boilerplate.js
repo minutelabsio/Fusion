@@ -66,30 +66,21 @@ define([
 
     };
 
-    function throttle( fn, delay, scope ){
+    function debounce( fn, delay ){
+
         var to
-            ,call = false
+            ,self
             ,args
             ,cb = function(){
-                clearTimeout( to );
-                if ( call ){
-                    call = false;
-                    to = setTimeout(cb, delay);
-                    fn.apply(scope, args);
-                } else {
-                    to = false;
-                }
+                fn.apply( self, args );
             }
             ;
 
-        scope = scope || null;
-
         return function(){
-            call = true;
+            self = this;
             args = arguments;
-            if ( !to ){
-                cb();
-            }
+            clearTimeout( to );
+            to = setTimeout( cb, delay );
         };
     }
 
@@ -282,9 +273,9 @@ define([
                 world.add(particles);
                 field.applyTo(particles);
             }
-            ,'change:density': throttle(function(){
+            ,'change:density': debounce(function(){
                 ui.emit('restart');
-            }, 1000)
+            }, 200)
         });
 
         world.on('fusion', fusionEvent, world);
