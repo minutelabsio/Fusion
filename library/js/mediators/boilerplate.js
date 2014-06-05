@@ -209,6 +209,9 @@ define([
                 }
                 lastE = val;
             }
+            ,'reset': function(){
+                ui.emit('restart');
+            }
             ,'restart': function(){
                 lastE = ui.settings.energy;
                 // remove all particles
