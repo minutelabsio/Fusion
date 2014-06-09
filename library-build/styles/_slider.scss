@@ -1,0 +1,26 @@
+.slider {
+    margin: 10px 16px;
+    height: 3px;
+    background: #8c8c8c;
+    z-index: 1;
+    cursor: pointer;
+
+    .handle {
+        background: #853b3b;
+        border: 1px solid #853b3b;//$deep-grey-light;
+        width: 20px;
+        height: 20px;
+        z-index: 2;
+        @include box-sizing( border-box );
+        @include border-radius( 50% );
+
+        &:hover {
+            background: lighten(#853b3b, 10);
+        }
+    }
+
+    .meter {
+        z-index: 1;
+        background: #000;
+    }
+}
