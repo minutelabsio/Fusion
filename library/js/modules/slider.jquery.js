@@ -27,7 +27,7 @@ define(['jquery'], function( $ ){
     }
 
     $.fn.slider = function( opts ){
-        
+
         return $(this).each(function(){
             var $this = $(this).addClass('slider')
                 ,options = $.extend({
@@ -110,7 +110,7 @@ define(['jquery'], function( $ ){
             });
             $(document).on('mouseup', end);
 
-            if ( Modernizr.touch ){
+            if ( window.Modernizr.touch ){
                 $this.on('touchstart', function( e ){
                     dragging = true;
                     drag( e );

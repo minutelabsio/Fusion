@@ -120,7 +120,7 @@ define([
         return lerp(0, 2e-8, v);
     }
 
-    function fusionEvent( entity ){
+    var fusionEvent = function fusionEvent( entity ){
 
         // give the fused particle energy
         entity.members[0].state.vel.mult( 40 );
@@ -161,7 +161,7 @@ define([
             })
             .start()
             ;
-    }
+    };
 
     function simulation( world, ui, el, field ){
         var renderer
@@ -247,7 +247,7 @@ define([
                 while( l < 60 && tries > 0 ){
                     add = true;
                     pos.set(viewWidth * Math.random(), viewHeight  * Math.random());
-                    for ( var i = 0, l = particles.length; i < l; i++ ){
+                    for ( var i = 0, ll = particles.length; i < ll; i++ ){
                         if ( particles[i].state.pos.dist(pos) <= lerp(200, 15, density) ){
                             add = false;
                             break;
@@ -343,7 +343,7 @@ define([
                     ,top: 0// v.y + center.y
                     ,left: 0//center.x + v.x
                 });
-                this.style[Modernizr.prefixed('transform')] = 'translate('+[v.x+center.x, v.y+center.y].join('px,')+'px) rotate('+(45 * i)+'deg)';
+                this.style[window.Modernizr.prefixed('transform')] = 'translate('+[v.x+center.x, v.y+center.y].join('px,')+'px) rotate('+(45 * i)+'deg)';
                 v.rotate( Math.PI/4 );
 
             });

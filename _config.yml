@@ -6,7 +6,7 @@ title : "Fusion (with PHD Comics)" # changeme
 id : "" # changeme
 description : "Short description" # changeme
 thumb: "thumb.gif" # changem
-version: "0.0.2"
+version: "0.0.3"
 
 ml_url: "http://minutelabs.io"
 ml_library: "http://labs.minutelabs.io/library"
