@@ -117,6 +117,10 @@ html, body, #wrap-outer {
         height: 400px;
         overflow: hidden;
         margin-left: -194px;
+
+        canvas {
+            @include border-radius( 50% );
+        }
     }
 }
 
@@ -167,10 +171,6 @@ html, body, #wrap-outer {
         width: 450px;
         height: 450px;
         margin-left: -227px;
-
-        canvas {
-            @include border-radius( 50% );
-        }
     }
 
     .slider .handle {
@@ -308,6 +308,13 @@ a.phdbtn {
 #bottom-info {
     position: relative;
 
+    .info {
+        width: 400px;
+        margin: auto;
+        text-align: center;
+        padding: 50px 0 0;
+    }
+
     .legend {
         margin: 34px 22px;
         h3 {
@@ -341,7 +348,7 @@ a.phdbtn {
     .credit {
         position: absolute;
         right: 20px;
-        top: 32px;
+        top: 138px;
         text-align: center;
 
         a {

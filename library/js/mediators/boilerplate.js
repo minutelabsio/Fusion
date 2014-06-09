@@ -170,7 +170,7 @@ define([
             // bounds of the window
             ,viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight)
             ,center = Physics.vector(viewWidth/2, viewHeight/2)
-            ,coulomb = Physics.behavior('coulomb', { strength: 3/world.timestep(), min: 5 })
+            ,coulomb = Physics.behavior('coulomb', { strength: 4/world.timestep(), min: 5 })
             ;
 
         // create a renderer
@@ -230,7 +230,7 @@ define([
             ,'reset': function(){
                 ui.emit('restart');
             }
-            ,'restart': function(){
+            ,'restart': debounce(function(){
                 lastE = ui.settings.energy;
                 // remove all particles
                 var old = world.find({ name: 'particle' });
@@ -272,10 +272,10 @@ define([
 
                 world.add(particles);
                 field.applyTo(particles);
-            }
-            ,'change:density': debounce(function(){
-                ui.emit('restart');
             }, 200)
+            ,'change:density': function(){
+                ui.emit('restart');
+            }
         });
 
         world.on('fusion', fusionEvent, world);
