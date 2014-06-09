@@ -309,7 +309,8 @@ a.phdbtn {
     position: relative;
 
     .info {
-        width: 340px;
+        font-size: 1.5em;
+        width: 420px;
         margin: auto;
         text-align: center;
         padding: 50px 0 0;
@@ -378,5 +379,12 @@ a.phdbtn {
             display: block;
             margin: 0 auto 0.4em;
         }
+    }
+
+    .nb {
+        font-size: 12px;
+        font-family: sans-serif;
+        padding-left: 22px;
+        padding-bottom: 80px;
     }
 }
